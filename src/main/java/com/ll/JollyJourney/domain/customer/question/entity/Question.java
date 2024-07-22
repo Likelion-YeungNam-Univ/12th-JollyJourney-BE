@@ -19,6 +19,11 @@ import java.util.List;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Question extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long customerQId;
+
     @Comment("문의 카테고리")
     @Enumerated(value = EnumType.STRING)
     private QuestionCategory questionCategory;

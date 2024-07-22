@@ -20,6 +20,10 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class BabyDiary extends BaseEntity {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long BabyDId;
+
     @Comment("내용")
     private String content;
 

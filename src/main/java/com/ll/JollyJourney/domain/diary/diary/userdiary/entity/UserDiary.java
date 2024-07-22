@@ -1,10 +1,7 @@
 package com.ll.JollyJourney.domain.diary.diary.userdiary.entity;
 
-import com.ll.JollyJourney.domain.post.post.entity.PostCategory;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -20,6 +17,10 @@ import java.sql.Time;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserDiary extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long userDId;
 
     @Comment("명상 기록")
     private String meditationReport;

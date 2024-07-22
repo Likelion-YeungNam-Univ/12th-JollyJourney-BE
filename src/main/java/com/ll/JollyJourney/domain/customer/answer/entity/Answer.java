@@ -3,9 +3,7 @@ package com.ll.JollyJourney.domain.customer.answer.entity;
 import com.ll.JollyJourney.domain.customer.question.entity.Question;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,6 +17,11 @@ import org.hibernate.annotations.Comment;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Answer extends BaseEntity {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long customerAId;
+
     @Comment("문의 정보")
     @ManyToOne(fetch = FetchType.LAZY)
     private Question question;

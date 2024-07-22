@@ -21,12 +21,16 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class JournalComment extends BaseEntity {
 
-    @JoinColumn(name = "journal_Id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long journalCoId;
+
+    @JoinColumn(name = "journal_id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Journal journal;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "member_Id", nullable = false)
+    @JoinColumn(name = "member_id")
     private Member member;
 
     @Column(length = 100)
