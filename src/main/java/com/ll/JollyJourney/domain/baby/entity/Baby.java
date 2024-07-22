@@ -20,8 +20,9 @@ import java.util.List;
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Baby extends BaseEntity {
 
-
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long BabyId;
 
     @Comment("아이 이름")
     @NotNull
