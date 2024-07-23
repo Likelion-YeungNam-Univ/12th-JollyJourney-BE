@@ -2,18 +2,14 @@ package com.ll.JollyJourney.domain.diary.diary.userdiary.entity;
 
 import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import java.sql.Time;
 
 @Entity
 @Getter
-@SuperBuilder
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class UserDiary extends BaseEntity {

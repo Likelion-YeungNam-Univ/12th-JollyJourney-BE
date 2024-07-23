@@ -1,0 +1,16 @@
+<aside class="test" th:fragment="asideFragment">
+
+            <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content" > <!-- 높이 조절 -->
+                <!-- Sidebar content here -->
+                <li><span style="font-size: 1.2rem;">고객 센터</span></li>
+                <li><a th:href="@{/announcement}">공지 사항</a></li>
+                <li><a th:href="@{/help/question}">1:1 문의</a></li>
+                <li>
+                    <a th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}" th:href="@{/help/myqna}">관리자 문의 내역</a>
+                    <a th:unless="${#authorization.expression('hasAuthority(''ADMIN'')')}" th:href="@{/help/myqna}">나의 문의 내역</a>
+                </li>
+                <li><a>FAQ</a></li>
+            </ul>
+
+</aside>
+

@@ -4,18 +4,14 @@ import com.ll.JollyJourney.domain.customer.question.entity.Question;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.experimental.SuperBuilder;
+import lombok.*;
 import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@SuperBuilder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@AllArgsConstructor
+@Builder
 public class Answer extends BaseEntity {
 
     @Id
@@ -32,4 +28,9 @@ public class Answer extends BaseEntity {
 
     @Comment("문의 답변 내용")
     private String answerContent;
+
+    public void changeAnswer(String answerContent) {
+
+        this.answerContent = answerContent;
+    }
 }

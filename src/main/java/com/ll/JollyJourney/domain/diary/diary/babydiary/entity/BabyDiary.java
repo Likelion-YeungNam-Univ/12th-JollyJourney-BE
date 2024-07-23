@@ -1,21 +1,16 @@
 package com.ll.JollyJourney.domain.diary.diary.babydiary.entity;
 
 import com.ll.JollyJourney.domain.baby.entity.Baby;
-import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.entity.MemberRole;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
 import lombok.*;
-import lombok.experimental.SuperBuilder;
 import org.hibernate.annotations.Comment;
-
-import java.util.ArrayList;
-import java.util.List;
 
 @Entity
 @Getter
-@SuperBuilder
+@Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class BabyDiary extends BaseEntity {

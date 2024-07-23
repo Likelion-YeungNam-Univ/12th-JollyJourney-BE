@@ -1,0 +1,111 @@
+<html layout:decorate="global/layouts/layout" xmlns:th="http://www.thymeleaf.org" xmlns="http://www.w3.org/1999/html">
+
+<div layout:fragment="content" class="container mx-auto p-4 bg-white rounded">
+    <th:block th:fragment="custom-css">
+        <style>
+
+        </style>
+    </th:block>
+
+    <!-- code -->
+    <div class="flex items-center justify-center">
+        <div class="bg-white shadow-md rounded-md p-8 w-full max-w-md">
+            <form th:action="@{/members/join}" method="post" th:object="${joinRequest}" class="max-w-md mx-auto">
+                <h1 class="text-3xl font-bold mb-4">회원가입</h1>
+
+
+                <!-- existing code -->
+                <div class="mb-4">
+                    <label for="email" class="block text-gray-700 text-sm font-bold mb-2">이메일:</label>
+                    <input type="email" id="email" name="email" th:field="*{email}"
+                           placeholder="ex) hongildong@naver.com"
+                           class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+                    <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" class="text-red-500">이메일 형식이 올바르지 않습니다.</p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="password" class="block text-gray-700 text-sm font-bold mb-2">비밀번호:</label>
+                    <div class="relative">
+                        <input type="password" id="password" name="password" th:field="*{password}"
+                               class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+                        <span id="togglePassword" class="absolute inset-y-0 right-0 pr-3 flex items-center text-sm leading-5"><i class="fas fa-eye"></i></span>
+                    </div>
+                    <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" class="text-red-500">비밀번호 형식이 올바르지 않습니다.</p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="passwordConfirm" class="block text-gray-700 text-sm font-bold mb-2">비밀번호 확인:</label>
+                    <input type="password" id="passwordConfirm" name="passwordConfirm" th:field="*{passwordConfirm}"
+                           class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+                    <p th:if="${#fields.hasErrors('passwordConfirm')}" th:errors="*{passwordConfirm}" class="text-red-500">비밀번호 형식이 올바르지 않습니다.</p>
+
+                </div>
+
+                <div class="mb-4">
+                    <label for="name" class="block text-gray-700 text-sm font-bold mb-2">이름:</label>
+                    <input type="text" id="name" name="name" th:field="*{name}"
+                           placeholder="ex) 홍길동"
+                           class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" class="text-red-500">이름 형식이 올바르지 않습니다.</p>
+
+                </div>
+
+                <div class="mb-4">
+                    <label for="phoneNumber" class="block text-gray-700 text-sm font-bold mb-2">전화번호:</label>
+                    <input type="tel" id="phoneNumber" name="phoneNumber" th:field="*{phoneNumber}"
+                           placeholder="ex) 010-1234-1234"
+                           class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+                    <p th:if="${#fields.hasErrors('phoneNumber')}" th:errors="*{phoneNumber}" class="text-red-500">전화번호 형식이 올바르지 않습니다.</p>
+
+                </div>
+
+                <div class="mb-4">
+                    <label for="birthDay" class="block text-gray-700 text-sm font-bold mb-2">생일:</label>
+                    <input type="date" id="birthDay" name="birthDay" th:field="*{birthDay}"
+                           class="w-full px-3 py-2 border rounded-md focus:outline-none focus:border-blue-500"/>
+                    <p th:if="${#fields.hasErrors('birthDay')}" th:errors="*{birthDay}" class="text-red-500">생년월일 형식이 올바르지 않습니다.</p>
+                </div>
+
+                <div class="mb-4">
+                    <label for="gender" class="block text-gray-700 text-sm font-bold mb-2">성별:</label>
+                    <div id="gender">
+                        <!-- MALE 라디오 버튼, 기본 선택됨 -->
+                        <input type="radio" id="male" name="gender" value="MALE" checked>
+                        <label for="male">남자</label><br>
+
+                        <!-- FEMALE 라디오 버튼 -->
+                        <input type="radio" id="female" name="gender" value="FEMALE">
+                        <label for="female">여자</label><br>
+                    </div>
+                </div>
+
+                <div th:if="${errorMessage}" style="text-align: center; font-size: 14px; color: red; font-weight: bold;"
+                     class="fieldError">
+                    <p th:text="${errorMessage}"></p>
+                </div>
+
+                <button type="submit" class="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 focus:outline-none focus:shadow-outline-blue" style="background: linear-gradient(to right, rgb(43, 88, 118), rgb(78, 67, 118))">
+                    가입
+                </button>
+            </form>
+        </div>
+    </div>
+
+</div>
+<div layout:fragment="script">
+    <script th:inline="javascript">
+        $(document).ready(function(){
+            $('#togglePassword').click(function(){
+                // 패스워드 입력란(input) 객체를 가져온다.
+                var passwordInput = $('#password');
+                // 입력란(input)의 타입을 체크한다.
+                var type = passwordInput.attr('type') === 'password' ? 'text' : 'password';
+                passwordInput.attr('type', type); // 입력란의 타입을 토글한다.
+
+                // 아이콘을 변경한다.
+                $(this).find('i').toggleClass('fa-eye fa-eye-slash');
+            });
+        });
+    </script>
+</div>
+</html>

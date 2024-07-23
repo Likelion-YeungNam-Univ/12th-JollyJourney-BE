@@ -1,29 +1,25 @@
 package com.ll.JollyJourney.global.jpa;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.NotNull;
-import lombok.*;
-import lombok.experimental.SuperBuilder;
+import jakarta.persistence.Column;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.MappedSuperclass;
+import lombok.Getter;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import java.time.LocalDateTime;
 
-@Getter
-@SuperBuilder
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-@MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-@ToString(callSuper = true)
+@MappedSuperclass
+@Getter
 public class BaseEntity {
 
-    @NotNull
     @CreatedDate
+    @Column(nullable = false, updatable = false)
     private LocalDateTime createDate;
 
-    @NotNull
     @LastModifiedDate
+    @Column(nullable = false)
     private LocalDateTime modifyDate;
 }

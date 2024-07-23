@@ -1,0 +1,118 @@
+<nav th:fragment="navbarFragment">
+    <div class="personal-QxLRRa9Yn3" id="" data-bid="NuLrRaAlNa">
+        <div class="header-inner">
+            <div class="header-container container-lg">
+                <div class="header-left">
+                    <h1 class="header-title">
+                        <a th:href="@{/}">
+                            <img th:src="@{/images/jj-logo.png}" alt="로고" style="width: 200px; height: 50px;">
+                        </a>
+                    </h1>
+
+                </div>
+
+                <div class="inputset inputset-lg">
+                    <button class="inputset-icon icon-right icon-search btn" type="button" aria-label="아이콘"
+                            onclick="search()"></button>
+                    <!-- https://live-ticket.com/concerts/keyword=서울극장 -->
+                    <input id="searchInput" type="text" class="inputset-input form-control border border-gray-300 rounded-md"
+                           style="height:35px;"
+                           th:value="${keyword != null} ? ${keyword} : ''"
+                           placeholder="검색어를 입력해주세요." aria-label="내용" onkeydown="handleEnterKey(event)">
+                </div>
+                <div class="header-right" style="justify-items: center; justify-content: center; align-items: center;">
+                    <div class="header-utils" style="justify-items: center; justify-content: center; align-items: center;">
+                        <div class="relative ml-3">
+                            <div class="flex">
+                                <div class="ml-auto">
+                                    <div class="dropdown dropdown-hover">
+                                        <!-- 아이콘 클릭 시 드롭다운 토글 -->
+                                        <button type="button"
+                                                class="relative flex items-center rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-white focus:ring-offset-2 focus:ring-offset-gray-800"
+                                                id="user-menu-button" aria-expanded="false" aria-haspopup="true" onclick="toggleDropdown()">
+                                            <img class="h-8 w-8 rounded-full"
+                                                 src="https://cdn-icons-png.flaticon.com/512/7542/7542670.png">
+                                        </button>
+
+                                        <!-- 드롭다운 메뉴 -->
+                                        <div id="dropdown-menu" class="hidden absolute right-0 mt-2 w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" tabindex="-1">
+                                            <!-- Unknown -->
+                                            <div sec:authorize="isAnonymous()">
+                                                <a th:href="@{/members/login}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-0">로그인</a>
+                                                <a th:href="@{/members/join}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-1">회원가입</a>
+                                            </div>
+
+                                            <!-- Member -->
+                                            <div sec:authorize="isAuthenticated()">
+                                                <a th:href="@{/mypage/profile}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-4">마이페이지</a>
+
+                                                <div th:if="${#authorization.expression('hasAuthority(''ADMIN'')')}">
+                                                    <a th:href="@{/admin/main}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1">관리자 페이지</a>
+                                                </div>
+
+                                                <a th:href="@{/members/logout}" class="block px-4 py-2 text-sm text-gray-700" role="menuitem" tabindex="-1" id="user-menu-item-5">로그아웃</a>
+                                                <form id="revokeForm" th:action="@{/members/revoke}" method="post">
+                                                    <button type="button" class="block px-4 py-2 text-sm text-gray-700" onclick="confirmRevoke()">회원 탈퇴</button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="header-dim"></div>
+    </div>
+    <div class="flex justify-end items-center bg-white-800 p-4">
+        <div class="flex space-x-4 header-container container-lg ml-auto" style="justify-content: flex-end">
+            <a th:href="@{/}" class="text-gray hover:text-black-300">HOME</a>
+            <a th:href="@{/journal}" class="text-gray hover:text-black-300">육아 스트레스 정보</a>
+            <a th:href="@{/userdiary}" class="text-gray hover:text-black-300">나의 기록</a>
+            <a th:href="@{/announcement}" class="text-gray hover:text-black-300">고객센터</a>
+            <!-- Add more categories as needed -->
+        </div>
+    </div>
+
+    <script th:inline="javascript">
+        function search() {
+            var searchInput = document.getElementById('searchInput').value;
+            if (searchInput.trim() !== "") {
+                var searchUrl = '/concert/search?keyword=' + encodeURIComponent(searchInput);
+                window.location.href = searchUrl;
+            }
+        }
+
+        function handleEnterKey(event) {
+            if (event.key === 'Enter') {
+                search();
+            }
+        }
+
+        function toggleDropdown() {
+            var dropdownMenu = document.getElementById('dropdown-menu');
+            dropdownMenu.classList.toggle('hidden');
+        }
+
+        // 다른 곳을 클릭하면 드롭다운 숨기기
+        document.addEventListener('click', function(event) {
+            var dropdownMenu = document.getElementById('dropdown-menu');
+            var userMenuButton = document.getElementById('user-menu-button');
+
+            if (!userMenuButton.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.classList.add('hidden');
+            }
+        });
+
+        function confirmRevoke() {
+            var confirmed = confirm("정말로 탈퇴하시겠습니까?");
+
+            if (confirmed) {
+                document.getElementById("revokeForm").submit();
+            }
+        }
+    </script>
+
+</nav>
