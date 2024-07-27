@@ -32,6 +32,6 @@ public class JournalComment extends BaseEntity {
     @Column(length = 100)
     private String content;
 
-    @OneToMany(mappedBy = "journalComment", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "journalComment", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<JournalReComment> journalReComments = new ArrayList<>();
 }
