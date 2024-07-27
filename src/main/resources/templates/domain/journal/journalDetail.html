@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html layout:decorate="~{global/layouts/layout}" xmlns:layout="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Journal Detail</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .comment-section {
+            margin-top: 20px;
+        }
+        .comment {
+            display: flex;
+            align-items: flex-start;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+        }
+        .comment-email {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .comment-content {
+            flex-grow: 1;
+        }
+        .recomment {
+            margin-left: 30px;
+            margin-top: 10px;
+        }
+        .recomment-email {
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .recomment-content {
+            flex-grow: 1;
+        }
+    </style>
+</head>
+<body>
+<div layout:fragment="content" class="container my-3">
+    <h1 th:text="${journal.title}"></h1>
+    <div th:text="${journal.content}"></div>
+    <div>
+        <label>Modify Date:</label>
+        <span th:text="${journal.modifyDate}"></span>
+    </div>
+    <div>
+        <label>Likes Count:</label>
+        <span th:text="${journal.likesCount}" id="likesCount"></span>
+    </div>
+    <div class="my-3">
+        <a th:href="@{|/journal/modify/${journal.journalId}|}" class="btn btn-sm btn-outline-secondary">수정</a>
+        <a th:href="@{|/journal/delete/${journal.journalId}|}" class="btn btn-sm btn-outline-secondary">삭제</a>
+    </div>
+    <div>
+        <form th:action="@{/likes}" method="post">
+            <input type="hidden" name="journalId" th:value="${journal.journalId}">
+            <input type="hidden" name="memberId" th:value="${#authentication.principal.id}">
+            <button type="submit" class="btn btn-sm btn-outline-secondary">
+                좋아요
+                <span class="badge rounded-pill bg-success" th:text="${journal.likesCount}"></span>
+            </button>
+        </form>
+    </div>
+    <div th:replace="~{domain/comment/commentForm :: commentForm}"></div>
+    <div class="comment-section">
+        <div th:each="comment : ${comments}" class="comment">
+            <div class="comment-email" th:text="${comment.member.email}">이메일</div>
+            <div class="comment-content" th:text="${comment.content}">댓글 내용</div>
+            <div>
+                <a th:href="@{|/journal/detail/${journal.journalId}/comments/modify/${comment.journalCoId}|}" class="btn btn-sm btn-secondary">수정</a>
+                <form th:action="@{/journal/detail/{journalId}/comments/delete(journalId=${journal.journalId})}" method="post" style="display:inline;">
+                    <input type="hidden" name="commentId" th:value="${comment.journalCoId}">
+                    <button type="submit" class="btn btn-sm btn-danger">삭제</button>
+                </form>
+            </div>
+
+
+        </div>
+    </div>
+    <a th:href="@{/journal/list}" class="btn btn-secondary mt-3">Back to List</a>
+</div>
+
+<!-- Bootstrap JS, Popper.js, and jQuery -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
