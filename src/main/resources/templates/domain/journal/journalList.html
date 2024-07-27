@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko" layout:decorate="~{global/layouts/layout}" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
+    <title>Hello journal</title>
+</head>
+<body>
+<!-- 네비게이션바 -->
+<nav th:replace="~{navbar :: navbarFragment}"></nav>
+
+<!-- 기본 템플릿 안에 삽입될 내용 Start -->
+<div layout:fragment="content">
+    <h1>Journal List</h1>
+    <table class="table">
+        <thead class="table-dark">
+        <tr>
+            <th>Title</th>
+            <th>Content</th>
+            <th>Modify Date</th>
+            <th>Likes Count</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="journal : ${paging.content}">
+            <td>
+                <a th:href="@{|/journal/detail/${journal.journalId}|}" th:text="${journal.title}"></a>
+            </td>
+            <td th:text="${journal.content}"></td>
+            <td th:text="${journal.modifyDate}"></td>
+            <td th:text="${journal.likesCount}"></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious()} ? 'disabled'">
+                <a class="page-link" th:href="@{|/journal/list?page=${paging.number - 1}|}" th:if="${type == null and keyword == null}">이전</a>
+                <a class="page-link" th:href="@{|/journal/list?page=${paging.number - 1}&type=${type}&keyword=${keyword}|}" th:if="${type != null and keyword != null}">이전</a>
+            </li>
+            <li th:each="page : ${#numbers.sequence(0, paging.totalPages - 1)}"
+                th:if="${page >= (paging.number - 3)} and ${page <= (paging.number + 3)}"
+                th:classappend="${page == paging.number} ? 'active'" class="page-item">
+                <a class="page-link"
+                   th:text="${page + 1}"
+                   th:href="@{|/journal/list?page=${page}|}" th:if="${type == null and keyword == null}"></a>
+                <a class="page-link"
+                   th:text="${page + 1}"
+                   th:href="@{|/journal/list?page=${page}&type=${type}&keyword=${keyword}|}" th:if="${type != null and keyword != null}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext()} ? 'disabled'">
+                <a class="page-link" th:href="@{|/journal/list?page=${paging.number + 1}|}" th:if="${type == null and keyword == null}">다음</a>
+                <a class="page-link" th:href="@{|/journal/list?page=${paging.number + 1}&type=${type}&keyword=${keyword}|}" th:if="${type != null and keyword != null}">다음</a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+    <a th:href="@{/journal/create}" class="btn btn-primary">게시글 등록</a>
+</div>
+<!-- 기본 템플릿 안에 삽입될 내용 End -->
+<!-- Bootstrap JS -->
+<script th:src="@{/bootstrap.min.js}"></script>
+</body>
+</html>
