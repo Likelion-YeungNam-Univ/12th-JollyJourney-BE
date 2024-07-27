@@ -33,6 +33,11 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority(MemberRole.ADMIN.getValue())
                         .requestMatchers(new AntPathRequestMatcher("/help/**")).authenticated() //고객 센터
                         .requestMatchers(new AntPathRequestMatcher("/review/**")).authenticated() //리뷰 작성
+                        .requestMatchers(new AntPathRequestMatcher("/journal/create")).hasAuthority(MemberRole.ADMIN.getValue()) // 관리자 저널 생성
+                        .requestMatchers(new AntPathRequestMatcher("/journal/modify/**")).hasAuthority(MemberRole.ADMIN.getValue()) // 관리자 저널 수정
+                        .requestMatchers(new AntPathRequestMatcher("/journal/delete/**")).hasAuthority(MemberRole.ADMIN.getValue()) // 관리자 저널 삭제
+                        .requestMatchers(new AntPathRequestMatcher("/journal/list")).permitAll() // 모든 사용자가 저널 리스트 조회 가능
+                        .requestMatchers(new AntPathRequestMatcher("/likes/journal/**")).authenticated() // 좋아요 기능은 인증된 사용자만 사용 가능
                         .requestMatchers(new AntPathRequestMatcher("/**")).permitAll()
                 )
                 .headers((headers) -> headers
@@ -47,11 +52,11 @@ public class SecurityConfig {
                         .logoutSuccessUrl("/")
                         .invalidateHttpSession(true)
                 )
-                .exceptionHandling(
-                        except ->
-                                except.authenticationEntryPoint(new CustomAuthenticationEntryPoint())
-                );;
-
+                .exceptionHandling(exceptions
+                        -> exceptions
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()) // 정보글 등록시 권한 없음 팝업 표시
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint())
+                );
 
         return http.build();
     }
