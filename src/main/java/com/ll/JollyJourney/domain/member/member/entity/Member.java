@@ -2,6 +2,7 @@ package com.ll.JollyJourney.domain.member.member.entity;
 
 import com.ll.JollyJourney.domain.customer.answer.entity.Answer;
 import com.ll.JollyJourney.domain.customer.question.entity.Question;
+import com.ll.JollyJourney.domain.likes.entity.Likes;
 import com.ll.JollyJourney.global.enums.Gender;
 import com.ll.JollyJourney.global.enums.LoginType;
 import com.ll.JollyJourney.global.jpa.BaseEntity;

@@ -18,7 +18,7 @@ import org.hibernate.annotations.OnDeleteAction;
         uniqueConstraints = {
                 @UniqueConstraint(
                         name="likes_uk",
-                        columnNames = {"postId","journalId", "memberId"}
+                        columnNames = {"journalId", "memberId"}
                 )
         }
 )
