@@ -10,7 +10,7 @@
         <input type="hidden" name="memberId" th:value="${#authentication.principal.id}">
         <input type="hidden" name="commentId" th:if="${commentToEdit != null}" th:value="${commentToEdit.journalCoId}">
         <div class="form-group">
-            <label for="comment" class="form-label">댓글</label>
+            <label for="comment" class="form-label"></label>
             <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="댓글을 작성하세요" th:text="${commentToEdit != null ? commentToEdit.content : ''}" required></textarea>
         </div>
         <button type="submit" class="btn btn-primary mt-2">제출</button>

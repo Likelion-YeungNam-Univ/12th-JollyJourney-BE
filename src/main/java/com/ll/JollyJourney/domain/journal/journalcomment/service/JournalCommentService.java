@@ -1,6 +1,5 @@
 package com.ll.JollyJourney.domain.journal.journalcomment.service;
 
-import com.ll.JollyJourney.DataNotFoundException;
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.journal.repository.JournalRepository;
 import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCommentDto;
@@ -9,10 +8,12 @@ import com.ll.JollyJourney.domain.journal.journalcomment.repository.JournalComme
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.stereotype.Service;
 
 import java.util.List;
 
@@ -28,6 +29,12 @@ public class JournalCommentService {
     @Autowired
     private MemberRepository memberRepository;
 
+    public boolean isAuthor(Long commentId) {
+        JournalComment comment = journalCommentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid comment Id:" + commentId));
+        String currentUsername = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
+        return comment.getMember().getEmail().equals(currentUsername);
+    }
 
     public void addComment(JournalCommentDto journalCommentDto) {
         logger.info("Adding comment: journalId={}, memberId={}, comment={}", journalCommentDto.getJournalId(), journalCommentDto.getMemberId(), journalCommentDto.getComment());
@@ -47,21 +54,19 @@ public class JournalCommentService {
         logger.info("Comment saved successfully");
     }
 
-
     public void updateComment(Long commentId, String newContent) {
         JournalComment comment = journalCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
 
-        // 필드 업데이트 후 저장
         comment.setContent(newContent);
         journalCommentRepository.save(comment);
         logger.info("Comment updated successfully");
     }
 
-
     public void deleteComment(Long commentId) {
         journalCommentRepository.deleteById(commentId);
     }
+
     public List<JournalComment> getCommentsByJournalId(Long journalId) {
         Journal journal = journalRepository.findById(journalId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid journal ID"));
@@ -72,5 +77,4 @@ public class JournalCommentService {
         return journalCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
     }
-
 }

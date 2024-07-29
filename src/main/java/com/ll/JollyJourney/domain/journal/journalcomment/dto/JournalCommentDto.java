@@ -10,7 +10,6 @@ public class JournalCommentDto {
         this.memberId = memberId;
         this.comment = comment;
     }
-
     public Long getJournalId() {
         return journalId;
     }

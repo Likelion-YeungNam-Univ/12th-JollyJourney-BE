@@ -48,8 +48,12 @@
             </button>
         </form>
     </div>
+    <!-- 댓글 작성 폼 -->
+    <div th:replace="~{domain/comment/commentForm :: commentForm(commentToEdit=${commentToEdit}, journalId=${journal.journalId})}"></div>
+
+    <!-- 댓글 목록 -->
     <div class="comment-section">
-        <h3>Comments</h3>
+        <h3>댓글</h3>
         <div th:each="comment : ${comments}" class="comment">
             <div class="comment-email" th:text="${comment.member.email}">이메일</div>
             <div class="comment-content" th:text="${comment.content}">댓글 내용</div>
@@ -62,7 +66,7 @@
             </div>
         </div>
     </div>
-    <div th:replace="~{domain/comment/commentForm :: commentForm(commentToEdit=${commentToEdit}, journalId=${journal.journalId})}"></div>
+
     <a th:href="@{/journal/list}" class="btn btn-secondary mt-3">Back to List</a>
 </div>
 

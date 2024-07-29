@@ -17,6 +17,7 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             throws IOException, ServletException {
 
         String accept = request.getHeader("Accept");
+        String requestURI = request.getRequestURI();
 
         if ("application/json".equals(accept)) {
             ErrorResponse error = ErrorResponse.builder()
@@ -30,8 +31,14 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
             response.setContentType("application/json;charset=UTF-8");
             response.getWriter().write(result);
         } else {
+            String redirectUrl;
+            if (requestURI.contains("/journal/detail/") && requestURI.contains("/comments")) {
+                redirectUrl = requestURI.substring(0, requestURI.indexOf("/comments"));    // 댓글 관련 요청
+            } else {
+                redirectUrl = "/journal/list";
+            }
             response.setContentType("text/html;charset=UTF-8");
-            response.getWriter().write("<script>alert('권한이 없습니다!'); window.location='/journal/list';</script>");
+            response.getWriter().write("<script>alert('권한이 없습니다!'); window.location='" + redirectUrl + "';</script>");
         }
     }
 
@@ -39,7 +46,6 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
         private String code;
         private String message;
 
-        // Builder 패턴을 사용하는 경우 Lombok의 @Builder를 사용할 수 있습니다.
         public static ErrorResponseBuilder builder() {
             return new ErrorResponseBuilder();
         }
@@ -67,7 +73,5 @@ public class CustomAccessDeniedHandler implements AccessDeniedHandler {
                 return errorResponse;
             }
         }
-
-        // Getters and setters can be added here if not using Lombok
     }
 }
