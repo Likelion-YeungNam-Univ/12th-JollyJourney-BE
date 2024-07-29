@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+</head>
+<body>
+<div th:fragment="commentForm">
+    <form th:action="@{(${commentToEdit == null} ? '/journal/detail/' + ${journalId} + '/comments' : '/journal/detail/' + ${journalId} + '/comments/modify')}" method="post">
+        <input type="hidden" name="journalId" th:value="${journalId}">
+        <input type="hidden" name="memberId" th:value="${#authentication.principal.id}">
+        <input type="hidden" name="commentId" th:if="${commentToEdit != null}" th:value="${commentToEdit.journalCoId}">
+        <div class="form-group">
+            <label for="comment" class="form-label">댓글</label>
+            <textarea class="form-control" id="comment" name="comment" rows="3" placeholder="댓글을 작성하세요" th:text="${commentToEdit != null ? commentToEdit.content : ''}" required></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-2">제출</button>
+    </form>
+</div>
+</body>
+</html>

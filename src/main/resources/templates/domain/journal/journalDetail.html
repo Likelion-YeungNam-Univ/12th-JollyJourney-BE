@@ -20,17 +20,6 @@
         .comment-content {
             flex-grow: 1;
         }
-        .recomment {
-            margin-left: 30px;
-            margin-top: 10px;
-        }
-        .recomment-email {
-            font-weight: bold;
-            margin-right: 10px;
-        }
-        .recomment-content {
-            flex-grow: 1;
-        }
     </style>
 </head>
 <body>
@@ -59,8 +48,8 @@
             </button>
         </form>
     </div>
-    <div th:replace="~{domain/comment/commentForm :: commentForm}"></div>
     <div class="comment-section">
+        <h3>Comments</h3>
         <div th:each="comment : ${comments}" class="comment">
             <div class="comment-email" th:text="${comment.member.email}">이메일</div>
             <div class="comment-content" th:text="${comment.content}">댓글 내용</div>
@@ -71,10 +60,9 @@
                     <button type="submit" class="btn btn-sm btn-danger">삭제</button>
                 </form>
             </div>
-
-
         </div>
     </div>
+    <div th:replace="~{domain/comment/commentForm :: commentForm(commentToEdit=${commentToEdit}, journalId=${journal.journalId})}"></div>
     <a th:href="@{/journal/list}" class="btn btn-secondary mt-3">Back to List</a>
 </div>
 
