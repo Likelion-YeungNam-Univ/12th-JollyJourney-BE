@@ -1,7 +1,6 @@
 package com.ll.JollyJourney.domain.journal.journalcomment.entity;
 
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
-import com.ll.JollyJourney.domain.journal.journalrecomment.entity.JournalReComment;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;

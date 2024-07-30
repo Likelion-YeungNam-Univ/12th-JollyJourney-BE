@@ -15,7 +15,7 @@
         <h2 class="text-2xl font-bold text-gray-900 mb-6">로그인</h2>
       </div>
 
-      <form th:action method="post" th:object="${loginFormDto}" class="space-y-6">
+      <form th:action="@{/members/login}" method="post" th:object="${loginFormDto}" class="space-y-6">
         <!-- error message -->
         <div class="mb-4" th:if="${param.error}">
           <div class="block text-gray-700 text-sm font-bold mb-2 text-red-500">

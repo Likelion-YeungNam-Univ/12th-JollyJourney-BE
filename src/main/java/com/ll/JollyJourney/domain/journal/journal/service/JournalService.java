@@ -53,14 +53,12 @@ public class JournalService {
         journalRepository.save(journal);
     }
 
-
     @Transactional
     public void modify(Long journalId, String title, String content) {
         Journal journal = journalRepository.findById(journalId)
                 .orElseThrow(() -> new DataNotFoundException("Journal not found"));
 
         journal.updateJournal(title, content);
-
     }
 
     public void delete(Journal journal) {

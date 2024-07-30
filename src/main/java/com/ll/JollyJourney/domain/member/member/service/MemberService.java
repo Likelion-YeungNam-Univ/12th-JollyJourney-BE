@@ -108,4 +108,12 @@ public class MemberService {
         memberRepository.delete(member);
 
     }
+
+    // 게시글 좋아요한 멤버
+    public Member getMember(Long memberId) {
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 계정입니다."));
+    }
+
+
 }

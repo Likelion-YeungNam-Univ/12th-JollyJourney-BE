@@ -83,9 +83,6 @@ public class Journal extends BaseEntity {
         return comments;
     }
 
-    public void setComments(List<JournalComment> comments) {
-        this.comments = comments;
-    }
 
 
 }
