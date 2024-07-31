@@ -30,7 +30,7 @@ public class JournalCommentController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createComment(@RequestBody JournalCoReq journalCoReq){
+    public ResponseEntity<JournalCoRes> createComment(@RequestBody JournalCoReq journalCoReq){
         JournalComment journalComment = journalCommentService.createComment(journalCoReq);
         JournalCoRes journalCoRes= JournalCoRes.fromEntity(journalComment);
         return ResponseEntity.ok(journalCoRes);
