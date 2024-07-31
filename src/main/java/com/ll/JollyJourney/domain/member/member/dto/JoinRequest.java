@@ -24,7 +24,7 @@ import java.time.LocalDate;
 public class JoinRequest {
 
     @NotBlank(message = "이메일은 필수 항목입니다.")
-    @Email(message="올바른 이메일 형식을 입력해주세요.")
+    @Email(message = "올바른 이메일 형식을 입력해주세요.")
     private String email;
 
     @NotBlank(message = "비밀번호는 필수 항목입니다.")
@@ -53,6 +53,20 @@ public class JoinRequest {
 
     @NotNull(message = "성별 필수 항목입니다.")
     private Gender gender;
+
+//    public Member toEntity() {
+//        return Member.builder()
+//                .email(this.email)
+//                .password(this.password)
+//                .name(this.name)
+//                .phoneNumber(this.phoneNumber)
+//                .birthDay(this.birthDay)
+//                .gender(this.gender)
+//                .role(MemberRole.MEMBER)
+//                .loginType(LoginType.APP)
+//                .build();
+//    }
+//}
 
     public Member toEntity(JoinRequest joinRequest) {
         return Member.builder()

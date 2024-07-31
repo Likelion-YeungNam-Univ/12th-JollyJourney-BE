@@ -1,78 +1,111 @@
 package com.ll.JollyJourney.domain.member.member.controller;
 
 import com.ll.JollyJourney.domain.member.member.dto.JoinRequest;
-import com.ll.JollyJourney.domain.member.member.dto.LoginFormDto;
+import com.ll.JollyJourney.domain.member.member.dto.MemberResponse;
+import com.ll.JollyJourney.domain.member.member.dto.ModifyRequest;
 import com.ll.JollyJourney.domain.member.member.service.MemberService;
 import com.ll.JollyJourney.global.security.config.SecurityUser;
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextImpl;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.ModelAttribute;
 
-@Controller
+@RestController
+@RequestMapping(" /members")
 @RequiredArgsConstructor
-@RequestMapping("/members")
 public class MemberController {
 
     private final MemberService memberService;
-
-    @GetMapping("/join")
-    public String joinForm(@ModelAttribute JoinRequest joinRequest, Model model) {
-        model.addAttribute("joinRequest", joinRequest);
-        return "domain/member/joinForm";
-    }
+    private SecurityUser securityUser;
 
     @PostMapping("/join")
-    public String postJoinForm(@Valid @ModelAttribute JoinRequest joinRequest,
-                               BindingResult bindingResult,
-                               Model model) {
-
-        if (bindingResult.hasErrors()) {
-            return "domain/member/joinForm";
-        }
-
-        try {
-            memberService.join(joinRequest);
-        } catch (Exception e) {
-            model.addAttribute("errorMessage", e.getMessage());
-            model.addAttribute("signupFormDto", joinRequest);
-            return "domain/member/joinForm";
-        }
-
-        return "redirect:/members/login";
+    public ResponseEntity<Void> read(@Valid @RequestBody JoinRequest joinRequest) {
+        memberService.join(joinRequest);
+        return ResponseEntity.ok().build();
     }
 
-    @GetMapping("/login")
-    public String loginForm(@ModelAttribute LoginFormDto loginFormDto) {
-        return "domain/member/loginForm";
+    @GetMapping("/{email}")
+    public ResponseEntity<MemberResponse> getMember(@PathVariable String email) {
+        MemberResponse memberResponse = memberService.getMemberResponse(email);
+        return ResponseEntity.ok(memberResponse);
     }
 
-    @GetMapping("/login/error")
-    public String loginErrorForm(LoginFormDto loginFormDto) {
-        return "domain/member/loginForm";
+    @PutMapping("/modify")
+    public ResponseEntity<Void> modify(@Valid @RequestBody ModifyRequest modifyRequest,
+                                       @AuthenticationPrincipal SecurityUser securityUser) {
+        this.securityUser = securityUser;
+        memberService.modify(modifyRequest, securityUser.getMember());
+        return ResponseEntity.ok().build();
     }
 
-    @PostMapping("/revoke")
-    public String revoke(HttpServletRequest request, HttpSession session) throws Exception {
-
-        SecurityContextImpl securityContext = (SecurityContextImpl) session.getAttribute("SPRING_SECURITY_CONTEXT");
-        Object principal = securityContext.getAuthentication().getPrincipal();
-        SecurityUser securityUser = (SecurityUser) principal;
-
+    @DeleteMapping("/revoke")
+    public ResponseEntity<Void> revokeMember(@AuthenticationPrincipal SecurityUser securityUser) {
         memberService.revokeMember(securityUser);
-
-        session = request.getSession(false);
-        if (session != null) {
-            session.invalidate();
-        }
-
-        return "redirect:/";
+        return ResponseEntity.ok().build();
     }
 }
-
+//이거 아님
+//@RestController
+//@RequiredArgsConstructor
+//@RequestMapping("/member")
+//public class MemberController {
+//
+//    private final MemberService memberService;
+//    private final JwtUtil jwtUtil;
+//
+//    // 회원가입
+//    @PostMapping("/register")
+//    public ResponseEntity<String> register(@RequestBody MemberDto memberDto) {
+//        try {
+//            memberService.registerMember(memberDto);
+//            return ResponseEntity.ok("회원가입 성공");
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+//
+//    // 이메일로 회원 조회
+//    @GetMapping("/email/{email}")
+//    public ResponseEntity<?> getByEmail(HttpServletRequest request, @PathVariable String email) {
+//        Long userId = jwtUtil.getUserId(jwtUtil.resolveToken(request).substring(7));
+//        Member member = memberService.findByEmail(email);
+//        if (!userId.equals(member.getUserId())) {
+//            return ResponseEntity.badRequest().build();
+//        }
+//        return ResponseEntity.ok(member);
+//    }
+////
+////    // 전화번호로 회원 조회
+////    @GetMapping("/phone/{phoneNumber}")
+////    public ResponseEntity<?> getByPhoneNumber(HttpServletRequest request, @PathVariable String phoneNumber) {
+////        Long userId = jwtUtil.getUserId(jwtUtil.resolveToken(request).substring(7));
+////        Member member = memberService.findByPhoneNumber(phoneNumber);
+////        if (!userId.equals(member.getUserId())) {
+////            return ResponseEntity.badRequest().build();
+////        }
+////        return ResponseEntity.ok(member);
+////    }
+//
+//    // 회원 정보 수정
+//    @PutMapping("/{userId}")
+//    public ResponseEntity<String> update(@PathVariable Long userId, @RequestBody MemberDto memberDto) {
+//        try {
+//            memberService.updateMember(userId, memberDto);
+//            return ResponseEntity.ok("회원 정보 수정 성공");
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+//
+//    // 회원 탈퇴
+//    @DeleteMapping("/{userId}")
+//    public ResponseEntity<String> delete(@PathVariable Long userId) {
+//        try {
+//            memberService.deleteMember(userId);
+//            return ResponseEntity.ok("회원 탈퇴 성공");
+//        } catch (IllegalArgumentException e) {
+//            return ResponseEntity.badRequest().body(e.getMessage());
+//        }
+//    }
+//}
