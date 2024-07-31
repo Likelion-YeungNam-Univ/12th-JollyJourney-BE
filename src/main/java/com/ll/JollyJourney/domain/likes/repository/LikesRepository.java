@@ -9,6 +9,5 @@ import java.util.Optional;
 
 public interface LikesRepository extends JpaRepository<Likes, Long> {
     boolean existsByJournalAndMember(Journal journal, Member member);
-    Optional<Likes> findByJournalAndMember(Journal journal, Member member);
     void deleteByJournalAndMember(Journal journal, Member member);
 }
