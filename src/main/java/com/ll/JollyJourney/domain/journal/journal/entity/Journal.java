@@ -1,17 +1,15 @@
 package com.ll.JollyJourney.domain.journal.journal.entity;
 
+import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotNull;
-import lombok.*;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.annotation.LastModifiedDate;
-import java.time.LocalDateTime;
-import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
+
 import java.util.List;
 
 
@@ -29,26 +27,28 @@ public class Journal extends BaseEntity {
     private String title; // 제목 필드 추가
     private String content;
 
-    @NotNull
-    @CreationTimestamp
-    @Column(name = "create_date", nullable = false, updatable = false)
-    private LocalDateTime createDate;
-
-    @NotNull
-    @Column(name = "modify_date")
-    @LastModifiedDate
-    private LocalDateTime modifyDate;
-
     private int likesCount = 0;
 
     // 댓글 기능 추가
     @OneToMany(mappedBy = "journal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JournalComment> comments;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private Member member;
+
+    // 생성자 추가
+    @Builder
+    public Journal(Member member, String title, String content) {
+        this.member = member;
+        this.title = title;
+        this.content = content;
+    }
+
+
     public void updateJournal(String title, String content) {
         this.title = title;
         this.content = content;
-        this.modifyDate = LocalDateTime.now();
     }
 
     public Long getJournalId() {
@@ -63,14 +63,6 @@ public class Journal extends BaseEntity {
         return content;
     }
 
-    public LocalDateTime getCreateDate() {
-        return createDate;
-    }
-
-    public LocalDateTime getModifyDate() {
-        return modifyDate;
-    }
-
     public int getLikesCount() {
         return likesCount;
     }
@@ -82,8 +74,5 @@ public class Journal extends BaseEntity {
     public List<JournalComment> getComments() {
         return comments;
     }
-
-
-
 }
 
