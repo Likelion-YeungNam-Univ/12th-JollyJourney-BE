@@ -33,7 +33,7 @@ public class JournalController {
     }
 
     @PostMapping("")
-    public ResponseEntity<?> createJournal(@RequestBody JournalReq journalReq){
+    public ResponseEntity<JournalRes> createJournal(@RequestBody JournalReq journalReq){
         Journal journal = journalService.createJournal(journalReq);
         JournalRes journalRes= JournalRes.fromEntity(journal);
         return ResponseEntity.ok(journalRes);
