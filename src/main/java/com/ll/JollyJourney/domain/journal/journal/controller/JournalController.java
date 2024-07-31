@@ -39,7 +39,7 @@ public class JournalController {
         return ResponseEntity.ok(journalRes);
     }
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateJournal(@PathVariable Long id, @RequestBody JournalReq journalReq){
+    public ResponseEntity<JournalRes> updateJournal(@PathVariable Long id, @RequestBody JournalReq journalReq){
         Journal journal = journalService.updateJournal(id, journalReq);
         JournalRes journalRes = JournalRes.fromEntity(journal);
         return ResponseEntity.ok(journalRes);
