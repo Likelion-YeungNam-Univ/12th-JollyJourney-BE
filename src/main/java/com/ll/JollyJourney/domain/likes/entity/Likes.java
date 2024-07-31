@@ -2,6 +2,7 @@ package com.ll.JollyJourney.domain.likes.entity;
 
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
+import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -21,7 +22,7 @@ import org.hibernate.annotations.OnDeleteAction;
                 )
         }
 )
-public class Likes  {
+public class Likes extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
