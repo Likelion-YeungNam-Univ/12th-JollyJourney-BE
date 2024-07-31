@@ -23,10 +23,10 @@ public class JournalCommentController {
         return ResponseEntity.ok(comments);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<?> getComment(@PathVariable Long id) {
-        JournalCoRes journalCoRes = journalCommentService.getComment(id);
-        return ResponseEntity.ok(id);
+    @GetMapping("/{commentId}")
+    public ResponseEntity<JournalCoRes> getComment(@PathVariable Long commentId) {
+        JournalCoRes journalCoRes = journalCommentService.getComment(commentId);
+        return ResponseEntity.ok(journalCoRes);
     }
 
     @PostMapping("")
