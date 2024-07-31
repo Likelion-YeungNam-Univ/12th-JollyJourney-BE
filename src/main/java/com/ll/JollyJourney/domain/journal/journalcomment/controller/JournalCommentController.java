@@ -37,7 +37,7 @@ public class JournalCommentController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateComment(@PathVariable Long id, @RequestBody JournalCoReq journalCoReq){
+    public ResponseEntity<JournalCoRes> updateComment(@PathVariable Long id, @RequestBody JournalCoReq journalCoReq){
         JournalComment journalComment = journalCommentService.updateComment(id, journalCoReq);
         JournalCoRes journalCoRes = JournalCoRes.fromEntity(journalComment);
         return ResponseEntity.ok(journalCoRes);
