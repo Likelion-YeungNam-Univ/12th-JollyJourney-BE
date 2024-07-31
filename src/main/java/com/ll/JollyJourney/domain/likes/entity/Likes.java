@@ -2,7 +2,6 @@ package com.ll.JollyJourney.domain.likes.entity;
 
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
-import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.OnDelete;
@@ -22,7 +21,7 @@ import org.hibernate.annotations.OnDeleteAction;
                 )
         }
 )
-public class Likes extends BaseEntity {
+public class Likes  {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,16 +35,4 @@ public class Likes extends BaseEntity {
     @JoinColumn(name="journalId")
     @ManyToOne
     private Journal journal;
-
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JoinColumn(name="journalId")
-//    @ManyToOne
-//    private JournalComment journalComment;
-//
-//    @OnDelete(action = OnDeleteAction.CASCADE)
-//    @JoinColumn(name="journalId")
-//    @ManyToOne
-//    private JournalReComment journalReComment; // 댓글에도 좋아요 기능을 넣을 것인가?
-
-
 }
