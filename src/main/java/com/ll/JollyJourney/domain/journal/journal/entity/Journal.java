@@ -1,15 +1,15 @@
 package com.ll.JollyJourney.domain.journal.journal.entity;
 
-import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 import jakarta.validation.constraints.NotNull;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
-
-import java.util.List;
 
 
 @Entity
@@ -28,10 +28,10 @@ public class Journal extends BaseEntity {
 
     private int likesCount = 0;
 
-    // 댓글 기능 추가
+    /* 댓글 기능 추가
     @OneToMany(mappedBy = "journal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JournalComment> comments;
-
+     */
 
     // 생성자 추가
     @Builder
@@ -65,8 +65,11 @@ public class Journal extends BaseEntity {
         this.likesCount = likesCount;
     }
 
+    /*
     public List<JournalComment> getComments() {
         return comments;
     }
+    
+     */
 }
 
