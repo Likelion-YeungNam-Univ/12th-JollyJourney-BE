@@ -55,3 +55,14 @@ kakao:
     uri: http://localhost:8080/oauth/kakao/callback
   admin: 7d026139e4ae178402d2fbed022f0cf6
 
+
+# TODO : 환경변수 처리 하세요!
+app:
+  token:
+    access:
+      secret-key: yourSuperSecretKeyAccess1234567890!ThisIsAComplexKey
+      expiration: 86400000
+    refresh:
+      secret-key: yourSuperSecretKeyRefresh1234567890!ThisIsAComplexKey
+      expiration: 86400000
+  allow-origins: http://localhost:3000

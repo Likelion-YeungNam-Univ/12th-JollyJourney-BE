@@ -2,11 +2,8 @@ package com.ll.JollyJourney.domain.member.member.controller;
 
 import com.ll.JollyJourney.domain.member.member.dto.JoinRequest;
 import com.ll.JollyJourney.domain.member.member.dto.MemberResponse;
-import com.ll.JollyJourney.domain.member.member.dto.ModifyRequest;
 import com.ll.JollyJourney.domain.member.member.service.MemberService;
-import com.ll.JollyJourney.global.security.config.SecurityUser;
 import jakarta.validation.Valid;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,7 +14,6 @@ import org.springframework.web.bind.annotation.*;
 public class MemberController {
 
     private final MemberService memberService;
-    private SecurityUser securityUser;
 
     @PostMapping("/join")
     public ResponseEntity<Void> read(@Valid @RequestBody JoinRequest joinRequest) {
@@ -31,13 +27,13 @@ public class MemberController {
         return ResponseEntity.ok(memberResponse);
     }
 
-    @PutMapping("/modify")
-    public ResponseEntity<Void> modify(@Valid @RequestBody ModifyRequest modifyRequest,
-                                       @AuthenticationPrincipal SecurityUser securityUser) {
-        this.securityUser = securityUser;
-        memberService.modify(modifyRequest, securityUser.getMember());
-        return ResponseEntity.ok().build();
-    }
+//    @PutMapping("/modify")
+//    public ResponseEntity<Void> modify(@Valid @RequestBody ModifyRequest modifyRequest,
+//                                       @AuthenticationPrincipal CustomUserDetails customUserDetails) {
+//        this.securityUser = securityUser;
+//        memberService.modify(modifyRequest, securityUser.getMember());
+//        return ResponseEntity.ok().build();
+//    }
 
 
 }
