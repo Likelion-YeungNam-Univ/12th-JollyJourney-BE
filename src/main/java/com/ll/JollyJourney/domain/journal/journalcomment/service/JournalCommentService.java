@@ -2,34 +2,70 @@ package com.ll.JollyJourney.domain.journal.journalcomment.service;
 
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.journal.repository.JournalRepository;
-import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCommentDto;
+import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCoReq;
+import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCoRes;
 import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.journal.journalcomment.repository.JournalCommentRepository;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
-import jakarta.transaction.Transactional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JournalCommentService {
-
-    private static final Logger logger = LoggerFactory.getLogger(JournalCommentService.class);
-
     @Autowired
     private JournalCommentRepository journalCommentRepository;
     @Autowired
     private JournalRepository journalRepository;
     @Autowired
     private MemberRepository memberRepository;
+    @Transactional(readOnly=true)
+    public List<JournalCoRes> getAllComments() {
+        List<JournalComment> comments = journalCommentRepository.findAll();
+        return comments.stream()
+                .map(JournalCoRes::fromEntity)
+                .collect(Collectors.toList());
+    }
 
-    public boolean isAuthor(Long commentId) {
+    @Transactional(readOnly = true)
+    public JournalCoRes getComment(Long commentId) {
+        JournalComment journalComment = journalCommentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글 없음"));
+        return JournalCoRes.fromEntity(journalComment);
+    }
+
+    @Transactional
+    public JournalComment createComment(JournalCoReq request) {
+        Journal journal = journalRepository.findById(request.journalId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
+        Member member = memberRepository.findById(request.userId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원 없음"));
+        JournalComment journalComment = request.toEntity(journal, member);
+        return journalCommentRepository.save(journalComment);
+    }
+
+    @Transactional
+    public JournalComment updateComment(Long commentId, JournalCoReq request) {
+        JournalComment journalComment= journalCommentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
+        journalComment.setContent(request.content());
+
+        return journalComment;
+    }
+
+    @Transactional
+    public void deleteComment(Long commentId) {
+        journalCommentRepository.deleteById(commentId);
+    }
+
+}
+
+
+/*    public boolean isAuthor(Long commentId) {
         JournalComment comment = journalCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid comment Id:" + commentId));
         String currentUsername = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
@@ -77,4 +113,5 @@ public class JournalCommentService {
         return journalCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
     }
-}
+
+ */
