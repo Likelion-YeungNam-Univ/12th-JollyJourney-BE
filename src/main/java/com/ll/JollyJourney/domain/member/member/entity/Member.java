@@ -1,8 +1,5 @@
 package com.ll.JollyJourney.domain.member.member.entity;
 
-import com.ll.JollyJourney.domain.customer.answer.entity.Answer;
-import com.ll.JollyJourney.domain.customer.question.entity.Question;
-import com.ll.JollyJourney.domain.likes.entity.Likes;
 import com.ll.JollyJourney.global.enums.Gender;
 import com.ll.JollyJourney.global.enums.LoginType;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
@@ -54,17 +51,25 @@ public class Member extends BaseEntity implements Serializable {
         } else {
             authorities.add(new SimpleGrantedAuthority("MEMBER"));
         }
-
         return authorities;
     }
 
+    /* Answer, Question 리스트 관련 없어서 삭제해도될듯?
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Answer> answers = new ArrayList<>();
 
     @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Question> questions = new ArrayList<>();
+*
 
+     */
 
+    /* Member Entity에 편의 메서드 작성해주기
+    public void addJournal(Journal journal) {
+        journals.add(journal);
+        journal.setMember(this);
+    }
+    */
     public void changePassword(String password) {
         this.password = password;
     }
