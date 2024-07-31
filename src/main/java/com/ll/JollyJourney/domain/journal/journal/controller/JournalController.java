@@ -1,29 +1,61 @@
 package com.ll.JollyJourney.domain.journal.journal.controller;
 
-import com.ll.JollyJourney.domain.journal.journal.dto.JournalFormDto;
+import com.ll.JollyJourney.domain.journal.journal.dto.JournalReq;
+import com.ll.JollyJourney.domain.journal.journal.dto.JournalRes;
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.journal.service.JournalService;
-import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.journal.journalcomment.service.JournalCommentService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.data.domain.Page;
-
-import jakarta.validation.Valid;
-import org.springframework.validation.BindingResult;
 
 import java.util.List;
 
 @Controller
-@RequestMapping("/journal")
+@RequestMapping("/journals")
 @RequiredArgsConstructor
 public class JournalController {
     private final JournalService journalService;
     private final JournalCommentService journalCommentService;
+
+    @GetMapping("")
+    public ResponseEntity<?> getAllJournals(){
+        List<JournalRes> journals = journalService.getAllJournals();
+        return ResponseEntity.ok(journals);
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getJournal(@PathVariable Long id) {
+        Journal journal = journalService.getJournal(id);
+        JournalRes journalRes = JournalRes.fromEntity(journal);
+        return ResponseEntity.ok(journal);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> createJournal(@RequestBody JournalReq journalReq){
+        Journal journal = journalService.createJournal(journalReq);
+        JournalRes journalRes= JournalRes.fromEntity(journal);
+        return ResponseEntity.ok(journalRes);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateJournal(@PathVariable Long id, @RequestBody JournalReq journalReq){
+        Journal journal = journalService.updateJournal(id, journalReq);
+        JournalRes journalRes = JournalRes.fromEntity(journal);
+        return ResponseEntity.ok(journalRes);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteJournal(@PathVariable Long id){
+        journalService.deleteJournal(id);
+        return ResponseEntity.ok().build();
+    }
+}
+
+
+/*
 
     @GetMapping("/list")
     public String list(Model model,
@@ -89,4 +121,4 @@ public class JournalController {
         journalService.delete(journal);
         return "redirect:/journal/list";
     }
-}
+ */
