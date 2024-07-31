@@ -39,11 +39,7 @@ public class MemberController {
         return ResponseEntity.ok().build();
     }
 
-    @DeleteMapping("/revoke")
-    public ResponseEntity<Void> revokeMember(@AuthenticationPrincipal SecurityUser securityUser) {
-        memberService.revokeMember(securityUser);
-        return ResponseEntity.ok().build();
-    }
+
 }
 //이거 아님
 //@RestController

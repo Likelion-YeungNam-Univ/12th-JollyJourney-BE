@@ -6,7 +6,6 @@ import com.ll.JollyJourney.domain.member.member.dto.ModifyRequest;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
 import com.ll.JollyJourney.global.enums.LoginType;
-import com.ll.JollyJourney.global.security.config.SecurityUser;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -22,7 +21,6 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
-    private final OAuth2Service oAuth2Service;
 
     public void join(JoinRequest joinRequest) {
         validateEmail(joinRequest.getEmail());
@@ -101,16 +99,6 @@ public class MemberService {
 
         member.modifyProfile(modifyRequest.getName(), modifyRequest.getPhoneNumber(), modifyRequest.getGender(), modifyRequest.getBirthday());
         memberRepository.save(member);
-    }
-
-    public void revokeMember(SecurityUser securityUser) {
-        Member member = securityUser.getMember();
-
-        if (member.getLoginType().equals(LoginType.KAKAO)) {
-            oAuth2Service.kakaoRevoke(member.getProviderId());
-        }
-
-        memberRepository.delete(member);
     }
 
     public Member getMember(Long memberId) {
