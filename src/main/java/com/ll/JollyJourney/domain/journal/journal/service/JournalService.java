@@ -1,30 +1,65 @@
 package com.ll.JollyJourney.domain.journal.journal.service;
 
+import com.ll.JollyJourney.domain.journal.journal.dto.JournalReq;
+import com.ll.JollyJourney.domain.journal.journal.dto.JournalRes;
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.journal.repository.JournalRepository;
-import jakarta.transaction.Transactional;
+import com.ll.JollyJourney.domain.member.member.entity.Member;
+import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
+import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
 
-import com.ll.JollyJourney.DataNotFoundException;
-
-import java.util.ArrayList;
 import java.util.List;
-import org.springframework.data.domain.Sort;
-import jakarta.persistence.criteria.CriteriaBuilder;
-import jakarta.persistence.criteria.CriteriaQuery;
-import jakarta.persistence.criteria.Predicate;
-import jakarta.persistence.criteria.Root;
-import jakarta.persistence.criteria.Join;
-import jakarta.persistence.criteria.JoinType;
-import org.springframework.data.jpa.domain.Specification;
+import java.util.stream.Collectors;
+
+@Service
+@RequiredArgsConstructor
+public class JournalService {
+    private final JournalRepository journalRepository;
+    private final MemberRepository memberRepository;
+
+    @Transactional(readOnly=true)
+    public List<JournalRes> getAllJournals() {
+        List<Journal> journals = journalRepository.findAll();
+        return journals.stream()
+                .map(JournalRes::fromEntity)
+                .collect(Collectors.toList());
+    }
+    @Transactional(readOnly=true)
+    public Journal getJournal(Long journalId) {
+        return journalRepository.findById(journalId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
+    }
+
+    @Transactional
+    public Journal createJournal(JournalReq request) {
+        Member member = memberRepository.findById(request.memberId())
+                .orElseThrow(() -> new IllegalArgumentException("해당 멤버 없음")); // 필요한지
+        Journal journal = request.toEntity(member);
+        return journalRepository.save(journal);
+    }
+
+    @Transactional
+    public Journal updateJournal(Long journalId, JournalReq request) {
+        Journal journal = journalRepository.findById(journalId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
+        journal.updateJournal(request.title(), request.content());
+
+        return journal;
+    }
+
+    @Transactional
+    public void deleteJournal(Long journalId) {
+        journalRepository.deleteById(journalId);
+    }
+}
+
+
+
+
+/*
 @RequiredArgsConstructor
 @Service
 public class JournalService {
@@ -80,3 +115,5 @@ public class JournalService {
     }
 
 }
+
+ */
