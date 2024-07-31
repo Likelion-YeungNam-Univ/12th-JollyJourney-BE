@@ -1,33 +1,56 @@
 package com.ll.JollyJourney.domain.journal.journalcomment.controller;
 
-import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCommentDto;
+import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCoReq;
+import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCoRes;
 import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.journal.journalcomment.service.JournalCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.AccessDeniedException;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
+import java.util.List;
 
 @Controller
-@RequestMapping("/journal/detail")
+@RequestMapping("/journal/{journalId}")
 public class JournalCommentController {
-
     @Autowired
     private JournalCommentService journalCommentService;
 
-    @PostMapping("/{journalId}/comments")
-    public String addComment(@PathVariable Long journalId,
-                             @RequestParam Long memberId,
-                             @RequestParam String comment) {
-        JournalCommentDto journalCommentDto = new JournalCommentDto(journalId, memberId, comment);
-        journalCommentService.addComment(journalCommentDto);
-        return "redirect:/journal/detail/" + journalId;
+    @GetMapping("")
+    public ResponseEntity<?> getAllComments(){
+        List<JournalCoRes> comments = journalCommentService.getAllComments();
+        return ResponseEntity.ok(comments);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> getComment(@PathVariable Long id) {
+        JournalCoRes journalCoRes = journalCommentService.getComment(id);
+        return ResponseEntity.ok(id);
+    }
+
+    @PostMapping("")
+    public ResponseEntity<?> createComment(@RequestBody JournalCoReq journalCoReq){
+        JournalComment journalComment = journalCommentService.createComment(journalCoReq);
+        JournalCoRes journalCoRes= JournalCoRes.fromEntity(journalComment);
+        return ResponseEntity.ok(journalCoRes);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateComment(@PathVariable Long id, @RequestBody JournalCoReq journalCoReq){
+        JournalComment journalComment = journalCommentService.updateComment(id, journalCoReq);
+        JournalCoRes journalCoRes = JournalCoRes.fromEntity(journalComment);
+        return ResponseEntity.ok(journalCoRes);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteComment(@PathVariable Long id){
+        journalCommentService.deleteComment(id);
+        return ResponseEntity.ok().build();
+    }
+}
+
+/*
     @PostMapping("/{journalId}/comments/delete")
     @PreAuthorize("isAuthenticated()")
     public String deleteComment(@PathVariable Long journalId,
@@ -67,4 +90,4 @@ public class JournalCommentController {
         journalCommentService.updateComment(commentId, comment);
         return "redirect:/journal/detail/" + journalId;
     }
-}
+ */
