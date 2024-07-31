@@ -2,6 +2,7 @@ package com.ll.JollyJourney.domain.likes.service;
 
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.journal.repository.JournalRepository;
+import com.ll.JollyJourney.domain.likes.dto.LikesReq;
 import com.ll.JollyJourney.domain.likes.entity.Likes;
 import com.ll.JollyJourney.domain.likes.repository.LikesRepository;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
@@ -18,6 +19,24 @@ public class LikesService {
     private final MemberRepository memberRepository;
     private final JournalRepository journalRepository;
 
+    @Transactional
+    public Likes addLikes(LikesReq likesReq) {
+        Journal journal = journalRepository.findById(likesReq.journalId())
+                .orElseThrow(() -> new IllegalArgumentException("Could not found journal id: " + likesReq.journalId()));
+        Member member = memberRepository.findById(likesReq.memberId())
+                .orElseThrow(() -> new IllegalArgumentException("Could not found member id: " + likesReq.memberId()));
+
+        Likes likes = likesReq.toEntity(journal, member);
+        return likesRepository.save(likes);
+    }
+
+    @Transactional
+    public void deleteLikes(Long likesId) {
+        likesRepository.deleteById(likesId);
+    }
+}
+
+    /*
     @Transactional
     public Integer likeJournal(Long journalId, Long memberId) {
         Journal journal = journalRepository.findById(journalId)
@@ -42,5 +61,6 @@ public class LikesService {
 
         journalRepository.save(journal);
         return journal.getLikesCount();
-    }
-}
+
+     */
+
