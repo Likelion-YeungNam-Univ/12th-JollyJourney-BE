@@ -44,7 +44,7 @@ public class JournalCommentController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteComment(@PathVariable Long id){
+    public ResponseEntity<JournalCoRes> deleteComment(@PathVariable Long id){
         journalCommentService.deleteComment(id);
         return ResponseEntity.ok().build();
     }
