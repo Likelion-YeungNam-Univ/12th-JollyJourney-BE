@@ -7,6 +7,7 @@ import com.ll.JollyJourney.global.security.authentication.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
@@ -21,9 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class MypageController {
     private final MemberService memberService;
     @GetMapping("/profile")
-    public String profileForm(@AuthenticationPrincipal CustomUserDetails customUserDetails, ModifyRequest modifyRequest) {
+    public ResponseEntity<?> profileForm(@AuthenticationPrincipal CustomUserDetails customUserDetails) {
+        Long id = customUserDetails.getMemberId(); // 로그인한 유저의 id를 알려줌
 
-        return "";
+        return ResponseEntity.ok(id);
     }
 
     @PostMapping("/profile")
