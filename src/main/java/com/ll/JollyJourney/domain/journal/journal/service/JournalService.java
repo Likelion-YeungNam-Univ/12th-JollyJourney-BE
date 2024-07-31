@@ -4,12 +4,9 @@ import com.ll.JollyJourney.domain.journal.journal.dto.JournalReq;
 import com.ll.JollyJourney.domain.journal.journal.dto.JournalRes;
 import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.journal.repository.JournalRepository;
-import com.ll.JollyJourney.domain.member.member.entity.Member;
-import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
-import org.springframework.transaction.annotation.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,7 +15,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JournalService {
     private final JournalRepository journalRepository;
-    private final MemberRepository memberRepository;
+    // private final MemberRepository memberRepository;
 
     @Transactional(readOnly=true)
     public List<JournalRes> getAllJournals() {
@@ -27,7 +24,8 @@ public class JournalService {
                 .map(JournalRes::fromEntity)
                 .collect(Collectors.toList());
     }
-    @Transactional(readOnly=true)
+
+    @Transactional(readOnly = true)
     public Journal getJournal(Long journalId) {
         return journalRepository.findById(journalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
@@ -35,9 +33,8 @@ public class JournalService {
 
     @Transactional
     public Journal createJournal(JournalReq request) {
-        Member member = memberRepository.findById(request.memberId())
-                .orElseThrow(() -> new IllegalArgumentException("해당 멤버 없음")); // 필요한지
-        Journal journal = request.toEntity(member);
+        Journal journal = request.toEntity();
+        journalRepository.save(journal);
         return journalRepository.save(journal);
     }
 
@@ -46,7 +43,6 @@ public class JournalService {
         Journal journal = journalRepository.findById(journalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
         journal.updateJournal(request.title(), request.content());
-
         return journal;
     }
 

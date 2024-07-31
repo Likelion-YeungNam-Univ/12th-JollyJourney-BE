@@ -26,10 +26,10 @@ public class JournalController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getJournal(@PathVariable Long id) {
+    public ResponseEntity<JournalRes> getJournal(@PathVariable Long id) {
         Journal journal = journalService.getJournal(id);
         JournalRes journalRes = JournalRes.fromEntity(journal);
-        return ResponseEntity.ok(journal);
+        return ResponseEntity.ok(journalRes);
     }
 
     @PostMapping("")
@@ -38,8 +38,6 @@ public class JournalController {
         JournalRes journalRes= JournalRes.fromEntity(journal);
         return ResponseEntity.ok(journalRes);
     }
-
-
     @PutMapping("/{id}")
     public ResponseEntity<?> updateJournal(@PathVariable Long id, @RequestBody JournalReq journalReq){
         Journal journal = journalService.updateJournal(id, journalReq);
