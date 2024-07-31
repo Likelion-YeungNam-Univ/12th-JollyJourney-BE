@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @Controller
-@RequestMapping("/journal/{journalId}")
+@RequestMapping("/journal/{journalId}/comments")
 public class JournalCommentController {
     @Autowired
     private JournalCommentService journalCommentService;
