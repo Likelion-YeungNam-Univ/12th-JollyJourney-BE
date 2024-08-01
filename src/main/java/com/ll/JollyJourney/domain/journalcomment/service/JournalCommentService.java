@@ -44,12 +44,17 @@ public class JournalCommentService {
     }
 
     @Transactional
-    public JournalComment createComment(JournalCoReq request) {
+    public JournalComment createComment(JournalCoReq request, Authentication authentication) {
         Journal journal = journalRepository.findById(request.journalId())
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
-        Member member = memberRepository.findById(request.userId())
+
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long currentUserId = userDetails.getMemberId();
+
+        Member member = memberRepository.findById(currentUserId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 회원 없음"));
         JournalComment journalComment = request.toEntity(journal, member);
+
         return journalCommentRepository.save(journalComment);
     }
 
@@ -57,6 +62,7 @@ public class JournalCommentService {
     public JournalComment updateComment(Long commentId, JournalCoReq request, Authentication authentication) {
         JournalComment journalComment = journalCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
+
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long currentUserId = userDetails.getMemberId();
 
@@ -80,7 +86,7 @@ public class JournalCommentService {
         Long currentUserId = userDetails.getMemberId();
         boolean isAdmin = authentication.getAuthorities().stream()
                 .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-        
+
         if (!journalComment.getMember().getUserId().equals(currentUserId) && !isAdmin) {
             throw new AccessDeniedException("댓글 작성자 또는 관리자만 삭제할 수 있습니다.");
         }
