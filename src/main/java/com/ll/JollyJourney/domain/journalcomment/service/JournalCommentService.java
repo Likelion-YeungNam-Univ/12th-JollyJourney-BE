@@ -4,11 +4,14 @@ import com.ll.JollyJourney.domain.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.repository.JournalRepository;
 import com.ll.JollyJourney.domain.journalcomment.dto.JournalCoReq;
 import com.ll.JollyJourney.domain.journalcomment.dto.JournalCoRes;
-import com.ll.JollyJourney.domain.journalcomment.repository.JournalCommentRepository;
 import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
+import com.ll.JollyJourney.domain.journalcomment.repository.JournalCommentRepository;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -50,10 +53,19 @@ public class JournalCommentService {
 
     @Transactional
     public JournalComment updateComment(Long commentId, JournalCoReq request) {
-        JournalComment journalComment= journalCommentRepository.findById(commentId)
+        JournalComment journalComment = journalCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
-        journalComment.setContent(request.content());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String currentUserEmail = authentication.getName();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        
+        if (!journalComment.getMember().getEmail().equals(currentUserEmail) && !isAdmin) {
+            throw new AccessDeniedException("댓글 작성자만 수정할 수 있습니다.");
+        }
+
+        journalComment.setContent(request.content());
         return journalComment;
     }
 
