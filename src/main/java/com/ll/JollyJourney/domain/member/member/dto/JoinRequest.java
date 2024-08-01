@@ -54,20 +54,6 @@ public class JoinRequest {
     @NotNull(message = "성별 필수 항목입니다.")
     private Gender gender;
 
-//    public Member toEntity() {
-//        return Member.builder()
-//                .email(this.email)
-//                .password(this.password)
-//                .name(this.name)
-//                .phoneNumber(this.phoneNumber)
-//                .birthDay(this.birthDay)
-//                .gender(this.gender)
-//                .role(MemberRole.MEMBER)
-//                .loginType(LoginType.APP)
-//                .build();
-//    }
-//}
-
     public Member toEntity(JoinRequest joinRequest) {
         return Member.builder()
                 .email(joinRequest.email)
