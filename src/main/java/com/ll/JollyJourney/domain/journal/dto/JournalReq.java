@@ -1,6 +1,6 @@
-package com.ll.JollyJourney.domain.journal.journal.dto;
+package com.ll.JollyJourney.domain.journal.dto;
 
-import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
+import com.ll.JollyJourney.domain.journal.entity.Journal;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 
 public record JournalReq(

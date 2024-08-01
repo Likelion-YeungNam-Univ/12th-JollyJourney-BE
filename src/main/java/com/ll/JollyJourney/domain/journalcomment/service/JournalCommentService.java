@@ -1,11 +1,11 @@
-package com.ll.JollyJourney.domain.journal.journalcomment.service;
+package com.ll.JollyJourney.domain.journalcomment.service;
 
-import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
-import com.ll.JollyJourney.domain.journal.journal.repository.JournalRepository;
-import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCoReq;
-import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCoRes;
-import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
-import com.ll.JollyJourney.domain.journal.journalcomment.repository.JournalCommentRepository;
+import com.ll.JollyJourney.domain.journal.entity.Journal;
+import com.ll.JollyJourney.domain.journal.repository.JournalRepository;
+import com.ll.JollyJourney.domain.journalcomment.dto.JournalCoReq;
+import com.ll.JollyJourney.domain.journalcomment.dto.JournalCoRes;
+import com.ll.JollyJourney.domain.journalcomment.repository.JournalCommentRepository;
+import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,7 +1,7 @@
-package com.ll.JollyJourney.domain.journal.journalcomment.dto;
+package com.ll.JollyJourney.domain.journalcomment.dto;
 
-import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
-import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
+import com.ll.JollyJourney.domain.journal.entity.Journal;
+import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 

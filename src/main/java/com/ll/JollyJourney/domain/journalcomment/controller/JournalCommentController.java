@@ -1,9 +1,9 @@
-package com.ll.JollyJourney.domain.journal.journalcomment.controller;
+package com.ll.JollyJourney.domain.journalcomment.controller;
 
-import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCoReq;
-import com.ll.JollyJourney.domain.journal.journalcomment.dto.JournalCoRes;
-import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
-import com.ll.JollyJourney.domain.journal.journalcomment.service.JournalCommentService;
+import com.ll.JollyJourney.domain.journalcomment.dto.JournalCoReq;
+import com.ll.JollyJourney.domain.journalcomment.dto.JournalCoRes;
+import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
+import com.ll.JollyJourney.domain.journalcomment.service.JournalCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;

@@ -1,6 +1,6 @@
-package com.ll.JollyJourney.domain.journal.journal.repository;
+package com.ll.JollyJourney.domain.journal.repository;
 
-import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
+import com.ll.JollyJourney.domain.journal.entity.Journal;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;

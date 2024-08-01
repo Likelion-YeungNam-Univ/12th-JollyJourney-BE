@@ -1,6 +1,6 @@
-package com.ll.JollyJourney.domain.journal.journalcomment.dto;
+package com.ll.JollyJourney.domain.journalcomment.dto;
 
-import com.ll.JollyJourney.domain.journal.journalcomment.entity.JournalComment;
+import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
 
 import java.time.LocalDateTime;
 

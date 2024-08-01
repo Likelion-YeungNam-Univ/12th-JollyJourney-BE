@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.domain.journal.journalcomment.dto;
+package com.ll.JollyJourney.domain.journalcomment.dto;
 
 public class JournalCommentDto {
     private final Long journalId;

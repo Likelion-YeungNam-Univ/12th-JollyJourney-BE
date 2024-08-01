@@ -1,7 +1,7 @@
 package com.ll.JollyJourney.domain.likes.service;
 
-import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
-import com.ll.JollyJourney.domain.journal.journal.repository.JournalRepository;
+import com.ll.JollyJourney.domain.journal.entity.Journal;
+import com.ll.JollyJourney.domain.journal.repository.JournalRepository;
 import com.ll.JollyJourney.domain.likes.dto.LikesReq;
 import com.ll.JollyJourney.domain.likes.entity.Likes;
 import com.ll.JollyJourney.domain.likes.repository.LikesRepository;

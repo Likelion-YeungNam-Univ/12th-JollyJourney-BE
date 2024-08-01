@@ -1,10 +1,10 @@
-package com.ll.JollyJourney.domain.journal.journal.controller;
+package com.ll.JollyJourney.domain.journal.controller;
 
-import com.ll.JollyJourney.domain.journal.journal.dto.JournalReq;
-import com.ll.JollyJourney.domain.journal.journal.dto.JournalRes;
-import com.ll.JollyJourney.domain.journal.journal.entity.Journal;
-import com.ll.JollyJourney.domain.journal.journal.service.JournalService;
-import com.ll.JollyJourney.domain.journal.journalcomment.service.JournalCommentService;
+import com.ll.JollyJourney.domain.journal.dto.JournalReq;
+import com.ll.JollyJourney.domain.journal.dto.JournalRes;
+import com.ll.JollyJourney.domain.journal.entity.Journal;
+import com.ll.JollyJourney.domain.journal.service.JournalService;
+import com.ll.JollyJourney.domain.journalcomment.service.JournalCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -15,6 +15,7 @@ import java.util.List;
 @Controller
 @RequestMapping("/journals")
 @RequiredArgsConstructor
+// @Tag(name = "[정보글 관련 API]", description = "정보글 관련 CRUD API")
 public class JournalController {
     private final JournalService journalService;
     private final JournalCommentService journalCommentService;

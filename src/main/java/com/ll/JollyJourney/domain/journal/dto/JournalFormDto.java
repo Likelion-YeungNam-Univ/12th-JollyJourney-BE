@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.domain.journal.journal.dto;
+package com.ll.JollyJourney.domain.journal.dto;
 
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
