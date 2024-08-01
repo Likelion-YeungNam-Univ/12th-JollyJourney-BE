@@ -1,5 +1,4 @@
-package com.ll.JollyJourney.domain.member.member.dto;
-
+package com.ll.JollyJourney.domain.auth.dto;
 
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.entity.MemberRole;
@@ -21,7 +20,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
-public class JoinRequest {
+public class SignUpReq {
 
     @NotBlank(message = "이메일은 필수 항목입니다.")
     @Email(message = "올바른 이메일 형식을 입력해주세요.")
@@ -54,14 +53,14 @@ public class JoinRequest {
     @NotNull(message = "성별 필수 항목입니다.")
     private Gender gender;
 
-    public Member toEntity(JoinRequest joinRequest) {
+    public Member toEntity() {
         return Member.builder()
-                .email(joinRequest.email)
-                .password(joinRequest.password)
-                .name(joinRequest.name)
-                .phoneNumber(joinRequest.phoneNumber)
-                .birthDay(joinRequest.birthDay)
-                .gender(joinRequest.gender)
+                .email(this.email)
+                .password(this.password)
+                .name(this.name)
+                .phoneNumber(this.phoneNumber)
+                .birthDay(this.birthDay)
+                .gender(this.gender)
                 .role(MemberRole.MEMBER)
                 .loginType(LoginType.APP)
                 .build();

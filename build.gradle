@@ -77,9 +77,11 @@ dependencies {
 	implementation 'com.amazonaws:aws-java-sdk-s3:1.12.261'
 	implementation 'org.springframework.cloud:spring-cloud-starter-aws:2.2.6.RELEASE'
 
+
 	// swagger
 	implementation group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
 }
+
 
 tasks.named('test') {
 	useJUnitPlatform()

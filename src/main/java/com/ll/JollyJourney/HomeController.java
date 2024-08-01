@@ -24,6 +24,7 @@ public class HomeController {
         if (authentication.getPrincipal() == "anonymous") {
             return "redirect:/login";
         }
+
         Optional<Member> _member = memberService.findByEmail(authentication.getName());
         if (_member.isEmpty()) {
             model.addAttribute("loginUser", false);

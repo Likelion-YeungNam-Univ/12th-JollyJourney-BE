@@ -1,5 +1,6 @@
 package com.ll.JollyJourney.domain.member.member.entity;
 
+
 import com.ll.JollyJourney.global.enums.Gender;
 import com.ll.JollyJourney.global.enums.LoginType;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
@@ -13,6 +14,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+
 
 @Entity
 @Getter
@@ -42,7 +44,6 @@ public class Member extends BaseEntity implements Serializable {
 
     private String providerId;
 
-
     public Collection<? extends GrantedAuthority> getAuthorities() {
         List<GrantedAuthority> authorities = new ArrayList<>();
 
@@ -54,22 +55,6 @@ public class Member extends BaseEntity implements Serializable {
         return authorities;
     }
 
-    /* Answer, Question 리스트 관련 없어서 삭제해도될듯?
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Answer> answers = new ArrayList<>();
-
-    @OneToMany(mappedBy = "member", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Question> questions = new ArrayList<>();
-*
-
-     */
-
-    /* Member Entity에 편의 메서드 작성해주기
-    public void addJournal(Journal journal) {
-        journals.add(journal);
-        journal.setMember(this);
-    }
-    */
     public void changePassword(String password) {
         this.password = password;
     }
@@ -77,7 +62,6 @@ public class Member extends BaseEntity implements Serializable {
     public void modifyProfile(String encodedPassword) {
         this.password = encodedPassword;
     }
-
 
     public void modifyProfile(String name, String phoneNumber, Gender gender, LocalDate birthDay) {
         this.name = name;
@@ -89,6 +73,4 @@ public class Member extends BaseEntity implements Serializable {
     public void clearPw(String encodedPassword) {
         this.password = encodedPassword;
     }
-
 }
-
