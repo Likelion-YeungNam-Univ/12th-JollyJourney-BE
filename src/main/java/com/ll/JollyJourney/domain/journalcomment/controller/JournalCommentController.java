@@ -6,6 +6,7 @@ import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.journalcomment.service.JournalCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,8 +37,8 @@ public class JournalCommentController {
         return ResponseEntity.ok(journalCoRes);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<JournalCoRes> updateComment(@PathVariable Long id, @RequestBody JournalCoReq journalCoReq){
+    @PutMapping("/modify/{id}")
+    public ResponseEntity<JournalCoRes> updateComment(@PathVariable Long id, @RequestBody JournalCoReq journalCoReq, Authentication authentication) {
         JournalComment journalComment = journalCommentService.updateComment(id, journalCoReq);
         JournalCoRes journalCoRes = JournalCoRes.fromEntity(journalComment);
         return ResponseEntity.ok(journalCoRes);
