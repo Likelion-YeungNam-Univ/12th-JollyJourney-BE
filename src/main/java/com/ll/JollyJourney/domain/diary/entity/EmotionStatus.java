@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.domain.diary.diary.userdiary.entity;
+package com.ll.JollyJourney.domain.diary.entity;
 
 public enum EmotionStatus {
     HAPPINESS("HAPPINESS"), //행복

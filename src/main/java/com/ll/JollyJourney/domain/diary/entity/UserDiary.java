@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.domain.diary.diary.userdiary.entity;
+package com.ll.JollyJourney.domain.diary.entity;
 
 import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;
