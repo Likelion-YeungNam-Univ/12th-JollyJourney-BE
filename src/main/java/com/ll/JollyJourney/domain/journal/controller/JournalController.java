@@ -49,7 +49,8 @@ public class JournalController {
         return ResponseEntity.ok(journalRes);
     }
 
-    @DeleteMapping("/{id}")
+    @PreAuthorize("hasRole('ADMIN')")
+    @DeleteMapping("delete/{id}")
     public ResponseEntity<JournalRes> deleteJournal(@PathVariable Long id){
         journalService.deleteJournal(id);
         return ResponseEntity.ok().build();
