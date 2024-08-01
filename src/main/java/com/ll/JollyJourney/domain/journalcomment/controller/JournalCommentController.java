@@ -30,10 +30,9 @@ public class JournalCommentController {
         return ResponseEntity.ok(journalCoRes);
     }
 
-    @PostMapping("")
+    @PostMapping("/create")
     public ResponseEntity<JournalComment> createComment(@RequestBody JournalCoReq request, Authentication authentication) {
-        String authorEmail = authentication.getName();
-        JournalComment journalComment = journalCommentService.createComment(request);
+        JournalComment journalComment = journalCommentService.createComment(request, authentication);
         return ResponseEntity.ok(journalComment);
     }
 
@@ -44,51 +43,9 @@ public class JournalCommentController {
         return ResponseEntity.ok(journalCoRes);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/delete/{id}")
     public ResponseEntity<JournalCoRes> deleteComment(@PathVariable Long id, Authentication authentication){
         journalCommentService.deleteComment(id, authentication);
         return ResponseEntity.ok().build();
     }
 }
-
-/*
-    @PostMapping("/{journalId}/comments/delete")
-    @PreAuthorize("isAuthenticated()")
-    public String deleteComment(@PathVariable Long journalId,
-                                @RequestParam Long commentId,
-                                Principal principal) {
-        if (!journalCommentService.isAuthor(commentId)) {
-            throw new AccessDeniedException("You are not authorized to delete this comment");
-        }
-        journalCommentService.deleteComment(commentId);
-        return "redirect:/journal/detail/" + journalId;
-    }
-
-    @GetMapping("/{journalId}/comments/modify/{commentId}")
-    @PreAuthorize("isAuthenticated()")
-    public String modifyCommentForm(@PathVariable Long journalId,
-                                    @PathVariable Long commentId,
-                                    Model model,
-                                    Principal principal) {
-        if (!journalCommentService.isAuthor(commentId)) {
-            throw new AccessDeniedException("You are not authorized to modify this comment");
-        }
-        JournalComment comment = journalCommentService.getCommentById(commentId);
-        model.addAttribute("commentToEdit", comment);
-        model.addAttribute("journalId", journalId);
-        return "domain/comment/commentForm";
-    }
-
-    @PostMapping("/{journalId}/comments/modify")
-    @PreAuthorize("isAuthenticated()")
-    public String modifyComment(@PathVariable Long journalId,
-                                @RequestParam Long commentId,
-                                @RequestParam String comment,
-                                Principal principal) {
-        if (!journalCommentService.isAuthor(commentId)) {
-            throw new AccessDeniedException("You are not authorized to modify this comment");
-        }
-        journalCommentService.updateComment(commentId, comment);
-        return "redirect:/journal/detail/" + journalId;
-    }
- */
