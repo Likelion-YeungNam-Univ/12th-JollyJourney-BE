@@ -7,6 +7,7 @@ import com.ll.JollyJourney.domain.journal.service.JournalService;
 import com.ll.JollyJourney.domain.journalcomment.service.JournalCommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -33,7 +34,8 @@ public class JournalController {
         return ResponseEntity.ok(journalRes);
     }
 
-    @PostMapping("")
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/create")
     public ResponseEntity<JournalRes> createJournal(@RequestBody JournalReq journalReq){
         Journal journal = journalService.createJournal(journalReq);
         JournalRes journalRes= JournalRes.fromEntity(journal);
