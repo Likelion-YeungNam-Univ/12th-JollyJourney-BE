@@ -4,10 +4,10 @@ server:
 spring:
   mvc:
     static-path-pattern: /static/**
-  datasource:
-    url: jdbc:mysql://jj-db.cjoo8ogckqcu.ap-northeast-2.rds.amazonaws.com:3306/jj_db
-    username: admin
-    password: abc1234!
+    datasource:
+      url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+      username: ${DATABASE_USER}
+      password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
 
 
@@ -33,12 +33,6 @@ admin:
   email: admin@example.com
   password: admin123
 
-  #  jpa:
-  #    hibernate:
-  #      ddl-auto: update
-  #    show-sql: true
-  #    properties:
-  #      hibernate.dialect: org.hibernate.dialect.MySQL8Dialect
 
   jpa:
     hibernate:
@@ -47,22 +41,12 @@ admin:
       hibernate:
         format_sql: true
         show_sql: true
-kakao:
-  client:
-    id: 82cae9ae6aa0eb8f9a9747642144f95e
-    secret:
-  redirect:
-    uri: http://localhost:8080/oauth/kakao/callback
-  admin: 7d026139e4ae178402d2fbed022f0cf6
-
-
-# TODO : 환경변수 처리 하세요!
 app:
   token:
     access:
-      secret-key: yourSuperSecretKeyAccess1234567890!ThisIsAComplexKey
+      secret-key: ${ACCESSTOKEN_KEY}
       expiration: 86400000
     refresh:
-      secret-key: yourSuperSecretKeyRefresh1234567890!ThisIsAComplexKey
+      secret-key: ${REFRESHTOKEN_KEY}
       expiration: 86400000
   allow-origins: http://localhost:3000
