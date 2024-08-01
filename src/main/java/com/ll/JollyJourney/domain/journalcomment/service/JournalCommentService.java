@@ -8,10 +8,11 @@ import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.journalcomment.repository.JournalCommentRepository;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
+import com.ll.JollyJourney.global.security.authentication.CustomUserDetails;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -19,6 +20,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class JournalCommentService {
     @Autowired
     private JournalCommentRepository journalCommentRepository;
@@ -52,16 +54,16 @@ public class JournalCommentService {
     }
 
     @Transactional
-    public JournalComment updateComment(Long commentId, JournalCoReq request) {
+    public JournalComment updateComment(Long commentId, JournalCoReq request, Authentication authentication) {
         JournalComment journalComment = journalCommentRepository.findById(commentId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long currentUserId = userDetails.getMemberId();
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        String currentUserEmail = authentication.getName();
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
-        
-        if (!journalComment.getMember().getEmail().equals(currentUserEmail) && !isAdmin) {
+        log.info("현재 사용자 ID: {}", currentUserId);
+        log.info("댓글 작성자 ID: {}", journalComment.getMember().getUserId());
+
+        if (!journalComment.getMember().getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("댓글 작성자만 수정할 수 있습니다.");
         }
 
@@ -71,59 +73,7 @@ public class JournalCommentService {
 
     @Transactional
     public void deleteComment(Long commentId) {
+
         journalCommentRepository.deleteById(commentId);
     }
-
 }
-
-
-/*    public boolean isAuthor(Long commentId) {
-        JournalComment comment = journalCommentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid comment Id:" + commentId));
-        String currentUsername = ((UserDetails) SecurityContextHolder.getContext().getAuthentication().getPrincipal()).getUsername();
-        return comment.getMember().getEmail().equals(currentUsername);
-    }
-
-    public void addComment(JournalCommentDto journalCommentDto) {
-        logger.info("Adding comment: journalId={}, memberId={}, comment={}", journalCommentDto.getJournalId(), journalCommentDto.getMemberId(), journalCommentDto.getComment());
-
-        Journal journal = journalRepository.findById(journalCommentDto.getJournalId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid journal ID"));
-        Member member = memberRepository.findById(journalCommentDto.getMemberId())
-                .orElseThrow(() -> new IllegalArgumentException("Invalid member ID"));
-
-        JournalComment comment = JournalComment.builder()
-                .journal(journal)
-                .member(member)
-                .content(journalCommentDto.getComment())
-                .build();
-
-        journalCommentRepository.save(comment);
-        logger.info("Comment saved successfully");
-    }
-
-    public void updateComment(Long commentId, String newContent) {
-        JournalComment comment = journalCommentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
-
-        comment.setContent(newContent);
-        journalCommentRepository.save(comment);
-        logger.info("Comment updated successfully");
-    }
-
-    public void deleteComment(Long commentId) {
-        journalCommentRepository.deleteById(commentId);
-    }
-
-    public List<JournalComment> getCommentsByJournalId(Long journalId) {
-        Journal journal = journalRepository.findById(journalId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid journal ID"));
-        return journalCommentRepository.findByJournal(journal);
-    }
-
-    public JournalComment getCommentById(Long commentId) {
-        return journalCommentRepository.findById(commentId)
-                .orElseThrow(() -> new IllegalArgumentException("Invalid comment ID"));
-    }
-
- */

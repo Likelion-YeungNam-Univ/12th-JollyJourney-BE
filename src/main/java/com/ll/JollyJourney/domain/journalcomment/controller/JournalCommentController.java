@@ -31,15 +31,15 @@ public class JournalCommentController {
     }
 
     @PostMapping("")
-    public ResponseEntity<JournalCoRes> createComment(@RequestBody JournalCoReq journalCoReq){
-        JournalComment journalComment = journalCommentService.createComment(journalCoReq);
-        JournalCoRes journalCoRes= JournalCoRes.fromEntity(journalComment);
-        return ResponseEntity.ok(journalCoRes);
+    public ResponseEntity<JournalComment> createComment(@RequestBody JournalCoReq request, Authentication authentication) {
+        String authorEmail = authentication.getName();
+        JournalComment journalComment = journalCommentService.createComment(request);
+        return ResponseEntity.ok(journalComment);
     }
 
     @PutMapping("/modify/{id}")
     public ResponseEntity<JournalCoRes> updateComment(@PathVariable Long id, @RequestBody JournalCoReq journalCoReq, Authentication authentication) {
-        JournalComment journalComment = journalCommentService.updateComment(id, journalCoReq);
+        JournalComment journalComment = journalCommentService.updateComment(id, journalCoReq, authentication);
         JournalCoRes journalCoRes = JournalCoRes.fromEntity(journalComment);
         return ResponseEntity.ok(journalCoRes);
     }
