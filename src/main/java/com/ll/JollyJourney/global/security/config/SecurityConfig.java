@@ -42,6 +42,7 @@ public class SecurityConfig {
 
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(new AntPathRequestMatcher("/journal/create")).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/journal/modify/{id}")).hasAuthority("ROLE_ADMIN")
                         .requestMatchers("/**").permitAll() // url 수정
                         .anyRequest().authenticated()
                 )
