@@ -4,12 +4,11 @@ server:
 spring:
   mvc:
     static-path-pattern: /static/**
-    datasource:
-      url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
-      username: ${DATABASE_USER}
-      password: ${DATABASE_PASSWORD}
+  datasource:
+    url: jdbc:mysql://${DATABASE_HOST}:${DATABASE_PORT}/${DATABASE_NAME}
+    username: ${DATABASE_USER}
+    password: ${DATABASE_PASSWORD}
     driver-class-name: com.mysql.cj.jdbc.Driver
-
 
 cloud:
   aws:
