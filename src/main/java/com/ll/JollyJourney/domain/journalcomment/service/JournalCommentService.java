@@ -72,8 +72,18 @@ public class JournalCommentService {
     }
 
     @Transactional
-    public void deleteComment(Long commentId) {
+    public void deleteComment(Long commentId, Authentication authentication) {
+        JournalComment journalComment = journalCommentRepository.findById(commentId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 댓글 없음"));
 
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long currentUserId = userDetails.getMemberId();
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(grantedAuthority -> grantedAuthority.getAuthority().equals("ROLE_ADMIN"));
+        
+        if (!journalComment.getMember().getUserId().equals(currentUserId) && !isAdmin) {
+            throw new AccessDeniedException("댓글 작성자 또는 관리자만 삭제할 수 있습니다.");
+        }
         journalCommentRepository.deleteById(commentId);
     }
 }
