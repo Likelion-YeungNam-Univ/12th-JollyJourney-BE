@@ -61,7 +61,7 @@ public class AuthService {
 
     private TokenRes issueToken(Member member){
         return new TokenRes(
-                jwtTokenProvider.issueAccessToken(member.getEmail()),
+                jwtTokenProvider.issueAccessToken(member.getEmail(), member.getRole().name()),
                 jwtTokenProvider.issueRefreshToken(member.getEmail()));
     }
 
