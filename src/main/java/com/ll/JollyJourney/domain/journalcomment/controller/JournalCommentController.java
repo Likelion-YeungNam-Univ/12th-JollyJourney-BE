@@ -6,6 +6,7 @@ import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.journalcomment.service.JournalCommentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -44,8 +45,16 @@ public class JournalCommentController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<JournalCoRes> deleteComment(@PathVariable Long id, Authentication authentication){
-        journalCommentService.deleteComment(id, authentication);
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> deleteComment(@PathVariable Long id, Authentication authentication) {
+        try {
+            journalCommentService.deleteComment(id, authentication);
+            return ResponseEntity.ok("댓글 삭제 완료");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(400).body(ex.getMessage());
+        } catch (AccessDeniedException ex) {
+            return ResponseEntity.status(403).body(ex.getMessage());
+        }
     }
+
 }
+
