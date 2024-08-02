@@ -15,7 +15,6 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class JournalService {
     private final JournalRepository journalRepository;
-    // private final MemberRepository memberRepository;
 
     @Transactional(readOnly=true)
     public List<JournalRes> getAllJournals() {
