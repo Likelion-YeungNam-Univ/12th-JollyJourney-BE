@@ -50,9 +50,13 @@ public class JournalController {
     }
 
     @PreAuthorize("hasRole('ADMIN')")
-    @DeleteMapping("delete/{id}")
-    public ResponseEntity<JournalRes> deleteJournal(@PathVariable Long id){
-        journalService.deleteJournal(id);
-        return ResponseEntity.ok().build();
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteJournal(@PathVariable Long id) {
+        try {
+            journalService.deleteJournal(id);
+            return ResponseEntity.ok("정보글 삭제 완료.");
+        } catch (IllegalArgumentException ex) {
+            return ResponseEntity.status(400).body(ex.getMessage());
+        }
     }
 }
