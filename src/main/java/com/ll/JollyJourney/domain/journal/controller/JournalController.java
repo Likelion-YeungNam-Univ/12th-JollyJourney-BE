@@ -6,6 +6,12 @@ import com.ll.JollyJourney.domain.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.service.JournalService;
 import com.ll.JollyJourney.domain.journalcomment.service.JournalCommentService;
 import com.ll.JollyJourney.global.service.S3Service;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -18,12 +24,40 @@ import java.util.List;
 @Controller
 @RequestMapping("/journals")
 @RequiredArgsConstructor
-// @Tag(name = "[정보글 관련 API]", description = "정보글 관련 CRUD API")
+@Tag(name = "[정보글 관련 API]", description = "정보글 관련 CRUD API")
 public class JournalController {
     private final JournalService journalService;
     private final JournalCommentService journalCommentService;
     private final S3Service s3Service;
 
+    @Operation(summary = "정보글 전체 조회", description = "정보글 전체 조회")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "정보글 전체 조회 성공",
+                    content = @Content(mediaType = "application/json", examples = {
+                            @ExampleObject(value = """
+									{
+										  "journalId": 1,
+                                          "title": "테스트 데이터입니다:[001]",
+                                          "content": "내용무",
+                                          "createDate": "2024-07-23T21:51:49.252343",
+                                          "modifyDate": "2024-08-03T12:15:17.442176",
+                                          "likesCount": 0,
+                                          "commentCount": 2
+									}
+									,
+									{
+                                            "journalId": 2,
+                                            "title": "테스트 데이터입니다:[002]",
+                                            "content": "내용무",
+                                            "createDate": "2024-07-23T21:51:49.415665",
+                                            "modifyDate": "2024-07-23T21:51:49.42922",
+                                            "likesCount": 0,
+                                            "commentCount": 0
+									}
+									""")
+                    })),
+            @ApiResponse(responseCode = "400", description = "사용자 생성 실패")
+    })
     @GetMapping("")
     public ResponseEntity<?> getAllJournals(){
         List<JournalRes> journals = journalService.getAllJournals();
