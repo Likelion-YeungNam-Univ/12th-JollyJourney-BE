@@ -31,11 +31,12 @@ public class JournalService {
     }
 
     @Transactional
-    public Journal createJournal(JournalReq request) {
-        Journal journal = request.toEntity();
-        journalRepository.save(journal);
+    public Journal createJournal(JournalReq request, String imageUrl) {
+        Journal journal = request.toEntity(imageUrl);
         return journalRepository.save(journal);
     }
+
+
 
     @Transactional
     public Journal updateJournal(Long journalId, JournalReq request) {

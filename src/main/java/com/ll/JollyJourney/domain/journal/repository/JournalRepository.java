@@ -18,18 +18,6 @@ public interface JournalRepository extends JpaRepository<Journal, Long> {
     List<Journal> findByTitleLike(String title);
     Page<Journal> findAll(Pageable pageable);
 
-    /*
-    @PersistenceContext;
-    EntityManager em;
-
-    public void save(Journal journal) {
-        em.persist(journal);
-    }
-    public Journal findjournal(Long id) {}
-    public List<Journal> findAll() {}
-
-
-    */
 
     @Query("SELECT j FROM Journal j WHERE (:type = 'title' AND j.title LIKE %:keyword%) OR (:type = 'content' AND j.content LIKE %:keyword%)")
     Page<Journal> searchByTypeAndKeyword(@Param("type") String type, @Param("keyword") String keyword, Pageable pageable);
