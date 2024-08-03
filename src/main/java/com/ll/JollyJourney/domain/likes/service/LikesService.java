@@ -3,11 +3,14 @@ package com.ll.JollyJourney.domain.likes.service;
 import com.ll.JollyJourney.domain.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.repository.JournalRepository;
 import com.ll.JollyJourney.domain.likes.dto.LikesReq;
+import com.ll.JollyJourney.domain.likes.dto.LikesRes;
 import com.ll.JollyJourney.domain.likes.entity.Likes;
 import com.ll.JollyJourney.domain.likes.repository.LikesRepository;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
+import com.ll.JollyJourney.global.security.authentication.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,47 +23,33 @@ public class LikesService {
     private final JournalRepository journalRepository;
 
     @Transactional
-    public Likes addLikes(LikesReq likesReq) {
+    public LikesRes toggleLikes(LikesReq likesReq, Authentication authentication) {
         Journal journal = journalRepository.findById(likesReq.journalId())
-                .orElseThrow(() -> new IllegalArgumentException("Could not found journal id: " + likesReq.journalId()));
-        Member member = memberRepository.findById(likesReq.memberId())
-                .orElseThrow(() -> new IllegalArgumentException("Could not found member id: " + likesReq.memberId()));
+                .orElseThrow(() -> new IllegalArgumentException("해당 저널 없음: " + likesReq.journalId()));
 
-        Likes likes = likesReq.toEntity(journal, member);
-        return likesRepository.save(likes);
-    }
+        CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
+        Long currentUserId = userDetails.getMemberId();
+        Member member = memberRepository.findById(currentUserId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 회원 없음: " + currentUserId));
 
-    @Transactional
-    public void deleteLikes(Long likesId) {
-        likesRepository.deleteById(likesId);
-    }
-}
-
-    /*
-    @Transactional
-    public Integer likeJournal(Long journalId, Long memberId) {
-        Journal journal = journalRepository.findById(journalId)
-                .orElseThrow(() -> new IllegalArgumentException("Could not found journal id: " + journalId));
-
-        Member member = memberRepository.findById(memberId)
-                .orElseThrow(() -> new IllegalArgumentException("Could not found member id: " + memberId));
-
-        if (likesRepository.existsByJournalAndMember(journal, member)) {
-            // 좋아요가 이미 존재하는 경우 삭제
-            likesRepository.deleteByJournalAndMember(journal, member);
-            journal.setLikesCount(journal.getLikesCount() - 1);
+        Likes existingLike = likesRepository.findByJournalAndMember(journal, member);
+        if (existingLike != null) {
+            likesRepository.delete(existingLike);
+            if (journal.getLikesCount() > 0) {
+                journal.setLikesCount(journal.getLikesCount() - 1);
+            }
+            journalRepository.save(journal);
+            return LikesRes.fromEntity(existingLike, "좋아요가 취소되었습니다.", journal.getLikesCount());
         } else {
-            // 좋아요가 존재하지 않는 경우 추가
-            Likes like = Likes.builder()
+            Likes newLike = Likes.builder()
                     .journal(journal)
                     .member(member)
                     .build();
-            likesRepository.save(like);
             journal.setLikesCount(journal.getLikesCount() + 1);
+            journalRepository.save(journal);
+            Likes savedLike = likesRepository.save(newLike);
+            return LikesRes.fromEntity(savedLike, "좋아요가 추가되었습니다.", journal.getLikesCount());
         }
-
-        journalRepository.save(journal);
-        return journal.getLikesCount();
-
-     */
+    }
+}
 

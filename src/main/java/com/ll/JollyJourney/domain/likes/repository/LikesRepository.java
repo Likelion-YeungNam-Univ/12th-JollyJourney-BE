@@ -6,6 +6,5 @@ import com.ll.JollyJourney.domain.member.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface LikesRepository extends JpaRepository<Likes, Long> {
-    boolean existsByJournalAndMember(Journal journal, Member member);
-    void deleteByJournalAndMember(Journal journal, Member member);
+    Likes findByJournalAndMember(Journal journal, Member member);
 }

@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,20 +23,18 @@ public class Journal extends BaseEntity {
 
     @NotNull
     private String title; // 제목 필드 추가
-    private String content;
 
+    private String content;
     private int likesCount = 0;
 
-    /* 댓글 기능 추가
-    @OneToMany(mappedBy = "journal", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<JournalComment> comments;
-     */
+    private String imageUrl;
 
     // 생성자 추가
     @Builder
-    public Journal(String title, String content) {
+    public Journal(String title, String content, String imageUrl) {
         this.title = title;
         this.content = content;
+        this.imageUrl = imageUrl;
     }
 
     public void updateJournal(String title, String content) {
@@ -64,12 +61,5 @@ public class Journal extends BaseEntity {
     public void setLikesCount(int likesCount) {
         this.likesCount = likesCount;
     }
-
-    /*
-    public List<JournalComment> getComments() {
-        return comments;
-    }
-    
-     */
 }
 

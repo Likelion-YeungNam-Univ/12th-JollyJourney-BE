@@ -5,13 +5,17 @@ import com.ll.JollyJourney.domain.likes.entity.Likes;
 public record LikesRes(
         Long likesId,
         Long memberId,
-        Long journalId
+        Long journalId,
+        String message,
+        int likesCount
 ) {
-    public static LikesRes fromEntity(Likes likes) {
+    public static LikesRes fromEntity(Likes likes, String message, int likesCount) {
         return new LikesRes(
                 likes.getLikesId(),
                 likes.getMember().getUserId(),
-                likes.getJournal().getJournalId()
+                likes.getJournal().getJournalId(),
+                message,
+                likesCount
         );
     }
 }

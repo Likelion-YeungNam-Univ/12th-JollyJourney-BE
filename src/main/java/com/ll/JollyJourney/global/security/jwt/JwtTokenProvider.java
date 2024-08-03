@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -19,7 +20,9 @@ import org.springframework.util.StringUtils;
 import java.security.Key;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Slf4j
@@ -52,14 +55,13 @@ public class JwtTokenProvider {
         return parseJwt(headerAuth);
     }
 
-    public String issueAccessToken(String memberId){
-
+    public String issueAccessToken(String memberId, String role){
         final Instant now = Instant.now();
         final Instant expiryDate = createExpiryDate(now, accessDuration);
 
         return Jwts.builder()
                 .setHeader(createHeader())
-                .setClaims(createClaims(memberId, expiryDate))
+                .setClaims(createClaims(memberId, expiryDate, role))
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiryDate))
                 .signWith(accessKey, signatureAlgorithm)
@@ -73,7 +75,7 @@ public class JwtTokenProvider {
 
         return Jwts.builder()
                 .setHeader(createHeader())
-                .setClaims(createClaims(memberId, expiryDate))
+                .setClaims(createClaims(memberId, expiryDate, null))
                 .setIssuedAt(Date.from(now))
                 .setExpiration(Date.from(expiryDate))
                 .signWith(refreshKey, signatureAlgorithm)
@@ -89,10 +91,13 @@ public class JwtTokenProvider {
     }
 
     public Authentication getAuthentication(Claims claims) {
-        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.get("sub", String.class));
+        UserDetails userDetails = userDetailsService.loadUserByUsername(claims.getSubject());
         log.info("{}", userDetails);
-        return new UsernamePasswordAuthenticationToken(userDetails, "",
-                userDetails.getAuthorities());
+        String role = claims.get("role", String.class);
+        List<SimpleGrantedAuthority> authorities = Collections.singletonList(
+                new SimpleGrantedAuthority("ROLE_" + role)
+        );
+        return new UsernamePasswordAuthenticationToken(userDetails, "", authorities);
     }
 
     private static String parseJwt(final String headerAuth) {
@@ -110,10 +115,12 @@ public class JwtTokenProvider {
         );
     }
 
-    private Claims createClaims(String memberId, Instant expiryDate){
-        return Jwts.claims()
-                .setSubject(memberId)
-                .setExpiration(Date.from(expiryDate));
+    private Claims createClaims(String memberId, Instant expiryDate, String role){
+        Claims claims = Jwts.claims().setSubject(memberId).setExpiration(Date.from(expiryDate));
+        if (role != null) {
+            claims.put("role", role);
+        }
+        return claims;
     }
 
     private Instant createExpiryDate(final Instant since, final Duration tokenExpiration) {
