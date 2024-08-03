@@ -5,12 +5,14 @@ import com.ll.JollyJourney.domain.journal.dto.JournalRes;
 import com.ll.JollyJourney.domain.journal.entity.Journal;
 import com.ll.JollyJourney.domain.journal.service.JournalService;
 import com.ll.JollyJourney.domain.journalcomment.service.JournalCommentService;
+import com.ll.JollyJourney.global.service.S3Service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.List;
 
 @Controller
@@ -20,6 +22,7 @@ import java.util.List;
 public class JournalController {
     private final JournalService journalService;
     private final JournalCommentService journalCommentService;
+    private final S3Service s3Service;
 
     @GetMapping("")
     public ResponseEntity<?> getAllJournals(){
@@ -36,10 +39,19 @@ public class JournalController {
 
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
-    public ResponseEntity<JournalRes> createJournal(@RequestBody JournalReq journalReq){
-        Journal journal = journalService.createJournal(journalReq);
-        JournalRes journalRes= JournalRes.fromEntity(journal);
-        return ResponseEntity.ok(journalRes);
+    public ResponseEntity<Journal> createJournal(@ModelAttribute JournalReq request) {
+        try {
+            // 이미지 업로드
+            String imageUrl = s3Service.uploadFile(request.image());
+
+            // 게시글 생성
+            Journal journal = request.toEntity(imageUrl);
+            Journal savedJournal = journalService.createJournal(request, imageUrl);
+
+            return ResponseEntity.ok(savedJournal);
+        } catch (IOException e) {
+            return ResponseEntity.status(500).body(null);
+        }
     }
     @PreAuthorize("hasRole('ADMIN')")
     @PutMapping("modify/{id}")
