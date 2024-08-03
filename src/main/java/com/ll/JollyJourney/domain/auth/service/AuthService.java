@@ -1,8 +1,6 @@
 package com.ll.JollyJourney.domain.auth.service;
 
-import com.ll.JollyJourney.domain.auth.dto.SignInReq;
-import com.ll.JollyJourney.domain.auth.dto.SignUpReq;
-import com.ll.JollyJourney.domain.auth.dto.TokenRes;
+import com.ll.JollyJourney.domain.auth.dto.*;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
 import com.ll.JollyJourney.global.security.jwt.JwtTokenProvider;
@@ -30,6 +28,33 @@ public class AuthService {
 
         return member;
     }
+
+    public Member modifyInfo(ModifyInfoReq request) {
+        Member member = readMemberOrThrow(request.email());
+
+        member.modifyProfile(
+                request.newName() != null ? request.newName() : member.getName(),
+                request.newPhoneNumber() != null ? request.newPhoneNumber() : member.getPhoneNumber(),
+                request.newGender() != null ? request.newGender() : member.getGender(),
+                request.newBirthDay() != null ? request.newBirthDay() : member.getBirthDay()
+        );
+
+        return memberRepository.save(member);
+    }
+
+    public Member changePassword(ChangePasswordReq request) {
+        Member member = readMemberOrThrow(request.email());
+
+        if (!member.getPassword().equals(request.oldPassword())) {
+            log.error("기존 비밀번호가 일치하지 않습니다.");
+            throw new IllegalArgumentException("기존 비밀번호가 일치하지 않습니다.");
+        }
+
+        member.changePassword(request.newPassword());
+        return memberRepository.save(member);
+    }
+
+
 
     private Member checkMemberValid(SignInReq request){
         Member member = readMemberOrThrow(request.email());
