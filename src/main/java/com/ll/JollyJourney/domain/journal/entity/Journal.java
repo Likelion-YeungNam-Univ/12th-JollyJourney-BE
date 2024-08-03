@@ -27,11 +27,14 @@ public class Journal extends BaseEntity {
     private String content;
     private int likesCount = 0;
 
+    private String imageUrl;
+
     // 생성자 추가
     @Builder
-    public Journal(String title, String content) {
+    public Journal(String title, String content, String imageUrl) {
         this.title = title;
         this.content = content;
+        this.imageUrl = imageUrl;
     }
 
     public void updateJournal(String title, String content) {
