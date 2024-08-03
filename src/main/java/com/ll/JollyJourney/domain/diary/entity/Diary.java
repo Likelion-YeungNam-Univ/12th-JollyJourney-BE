@@ -1,5 +1,7 @@
 package com.ll.JollyJourney.domain.diary.entity;
 
+import com.ll.JollyJourney.domain.diary.dto.DiaryReq;
+import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.global.jpa.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -12,7 +14,7 @@ import java.sql.Time;
 @Builder
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserDiary extends BaseEntity {
+public class Diary extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,5 +49,20 @@ public class UserDiary extends BaseEntity {
     @Enumerated(value = EnumType.STRING)
     private EmotionStatus emotionStatus;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "member_id")
+    private Member member;
+
+    public void update(DiaryReq request) {
+        this.meditationReport = request.meditationReport();
+        this.thanksReport = request.thanksReport();
+        this.exerciseReport = request.exerciseReport();
+        this.exerciseTime = request.exerciseTime();
+        this.sleepTime = request.sleepTime();
+        this.sleepQuality = request.sleepQuality();
+        this.kidReport = request.kidReport();
+        this.bodyStatus = request.bodyStatus();
+        this.emotionStatus = request.emotionStatus();
+    }
 
 }
