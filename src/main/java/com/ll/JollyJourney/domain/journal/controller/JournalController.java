@@ -43,7 +43,6 @@ public class JournalController {
         try {
             // 이미지 업로드
             String imageUrl = s3Service.uploadFile(request.image());
-
             // 게시글 생성
             Journal journal = request.toEntity(imageUrl);
             Journal savedJournal = journalService.createJournal(request, imageUrl);

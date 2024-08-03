@@ -9,10 +9,11 @@ public record JournalRes(
         String content,
         LocalDateTime createDate,
         LocalDateTime modifyDate,
-        int likesCount
+        int likesCount,
+        int commentCount
 ) {
-    public static JournalRes of(Long journalId, String title, String content, LocalDateTime createDate, LocalDateTime modifyDate, int likesCount) {
-        return new JournalRes(journalId, title, content, createDate, modifyDate, likesCount);
+    public static JournalRes of(Long journalId, String title, String content, LocalDateTime createDate, LocalDateTime modifyDate, int likesCount, int commentCount) {
+        return new JournalRes(journalId, title, content, createDate, modifyDate, likesCount, commentCount);
     }
 
     public static JournalRes fromEntity(Journal journal) {
@@ -22,7 +23,8 @@ public record JournalRes(
                 journal.getContent(),
                 journal.getCreateDate(),
                 journal.getModifyDate(),
-                journal.getLikesCount()
+                journal.getLikesCount(),
+                journal.getCommentCount()
         );
     }
 }
