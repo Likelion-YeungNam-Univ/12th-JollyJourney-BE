@@ -40,9 +40,12 @@ public class Journal extends BaseEntity {
         this.imageUrl = imageUrl;
     }
 
-    public void updateJournal(String title, String content) {
+    public void updateJournal(String title, String content, String imageUrl) {
         this.title = title;
         this.content = content;
+        if (imageUrl != null) {
+            this.imageUrl = imageUrl;
+        }
     }
 
     public Long getJournalId() {
@@ -73,7 +76,9 @@ public class Journal extends BaseEntity {
     }
 
     public int getCommentCount() {
-        return comments.size();
+        return (comments == null) ? 0 : comments.size();
     }
+
+
 }
 
