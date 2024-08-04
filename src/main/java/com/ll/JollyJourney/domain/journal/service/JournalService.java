@@ -37,14 +37,14 @@ public class JournalService {
     }
 
 
-
     @Transactional
-    public Journal updateJournal(Long journalId, JournalReq request) {
+    public Journal updateJournal(Long journalId, JournalReq request, String imageUrl) {
         Journal journal = journalRepository.findById(journalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
-        journal.updateJournal(request.title(), request.content());
+        journal.updateJournal(request.title(), request.content(), imageUrl);
         return journal;
     }
+
 
     @Transactional
     public void deleteJournal(Long journalId) {
