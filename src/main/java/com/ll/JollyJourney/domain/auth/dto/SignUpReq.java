@@ -36,8 +36,7 @@ public class SignUpReq {
     @NotBlank(message = "비밀번호 확인은 필수 항목입니다.")
     private String passwordConfirm;
 
-    @NotBlank(message = "본명은 필수 항목입니다.")
-    private String name; // 본명
+    private String name;
 
     @NotBlank(message = "전화번호는 필수 항목입니다.")
     @Pattern(
@@ -57,6 +56,7 @@ public class SignUpReq {
         return Member.builder()
                 .email(this.email)
                 .password(this.password)
+                .passwordConfirm(this.passwordConfirm)
                 .name(this.name)
                 .phoneNumber(this.phoneNumber)
                 .birthDay(this.birthDay)

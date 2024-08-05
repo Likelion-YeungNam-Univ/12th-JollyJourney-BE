@@ -29,6 +29,7 @@ public class Member extends BaseEntity implements Serializable {
 
     private String email;
     private String password;
+    private String passwordConfirm;
     private String name;
     private String phoneNumber;
     private LocalDate birthDay;
