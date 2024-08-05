@@ -5,9 +5,12 @@ import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -48,27 +51,27 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-    @Bean
-    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
-
-        httpSecurity
-                .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
-
-                .sessionManagement(sess -> sess.sessionCreationPolicy(
-                        SessionCreationPolicy.STATELESS))
-
-                .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(getPublicEndpoints()).permitAll()
-                        .anyRequest().authenticated()
-                )
-                .exceptionHandling(auth -> auth
-                        .authenticationEntryPoint(customAuthenticationEntryPoint)
-                );
-        jwtSecurityConfig.configure(httpSecurity);
-
-        return httpSecurity.build();
-    }
+//    @Bean
+//    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+//
+//        httpSecurity
+//                .csrf(AbstractHttpConfigurer::disable)
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//
+//                .sessionManagement(sess -> sess.sessionCreationPolicy(
+//                        SessionCreationPolicy.STATELESS))
+//
+//                .authorizeHttpRequests(auth -> auth
+//                        .requestMatchers(getPublicEndpoints()).permitAll()
+//                        .anyRequest().authenticated()
+//                )
+//                .exceptionHandling(auth -> auth
+//                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+//                );
+//        jwtSecurityConfig.configure(httpSecurity);
+//
+//        return httpSecurity.build();
+//    }
     @Bean
     public CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
@@ -86,6 +89,48 @@ public class SecurityConfig {
                 Stream.of(publicEndpoints).map(AntPathRequestMatcher::new),
                 Stream.of(new AntPathRequestMatcher("/api/v1/post", "GET")) // GET 요청에 대해서만 permitAll
         ).toArray(RequestMatcher[]::new);
+    }
+
+
+
+    @Bean
+    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
+        httpSecurity
+                .csrf(AbstractHttpConfigurer::disable)
+                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+
+                .sessionManagement(sess -> sess.sessionCreationPolicy(
+                        SessionCreationPolicy.STATELESS))
+
+                .authorizeHttpRequests(auth -> auth
+                        .requestMatchers(new AntPathRequestMatcher("/journal/create")).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/journal/modify/{id}")).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/journal/delete/{id}")).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/journal/{journalId}/comments")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/journal/{journalId}/comments/{commentId}")).permitAll()
+                        .requestMatchers("/**").permitAll() // url 수정
+                        .anyRequest().authenticated()
+                )
+                .exceptionHandling(auth -> auth
+                        .authenticationEntryPoint(customAuthenticationEntryPoint)
+                );
+        // jwtSecurityConfig.configure(httpSecurity);
+
+        return httpSecurity.build();
+    }
+
+
+
+
+    @Bean
+    public WebSecurityCustomizer webSecurityCustomizer() {
+        // antMatchers 부분도 deprecated 되어 requestMatchers로 대체
+        return (web) -> web.ignoring().requestMatchers("/js/**", "/css/**");
+    }
+
+    @Bean
+    AuthenticationManager authenticationManager(AuthenticationConfiguration authenticationConfiguration) throws Exception {
+        return authenticationConfiguration.getAuthenticationManager();
     }
 }
 
