@@ -8,8 +8,7 @@ import groovyjarjarantlr4.v4.runtime.misc.NotNull;
 public record JournalCoReq(
 
         @NotNull String content,
-        @NotNull Long journalId,
-        @NotNull Long userId
+        @NotNull Long journalId
 ) {
     public JournalComment toEntity(Journal journal, Member member) {
         return JournalComment.builder()

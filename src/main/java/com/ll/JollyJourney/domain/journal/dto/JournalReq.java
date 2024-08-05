@@ -7,7 +7,6 @@ import org.springframework.web.multipart.MultipartFile;
 public record JournalReq(
         @NotNull String title,
         String content,
-        Long userId,
         MultipartFile image
 ) {
     public Journal toEntity(String imageUrl){
