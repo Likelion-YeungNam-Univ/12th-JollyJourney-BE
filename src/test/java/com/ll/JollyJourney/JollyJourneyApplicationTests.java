@@ -1,11 +1,8 @@
 package com.ll.JollyJourney;
 
-import com.ll.JollyJourney.domain.journal.journal.service.JournalService;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.transaction.annotation.Transactional;
 
 @SpringBootTest
 class JollyJourneyApplicationTests {

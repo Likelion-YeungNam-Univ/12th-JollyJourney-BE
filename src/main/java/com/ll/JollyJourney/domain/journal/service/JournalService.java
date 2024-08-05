@@ -1,5 +1,6 @@
 package com.ll.JollyJourney.domain.journal.service;
 
+import com.ll.JollyJourney.domain.journal.dto.JournalListRes;
 import com.ll.JollyJourney.domain.journal.dto.JournalReq;
 import com.ll.JollyJourney.domain.journal.dto.JournalRes;
 import com.ll.JollyJourney.domain.journal.entity.Journal;
@@ -16,20 +17,16 @@ import java.util.stream.Collectors;
 public class JournalService {
     private final JournalRepository journalRepository;
 
-    @Transactional(readOnly=true)
-    public List<JournalRes> getAllJournals() {
+    public List<JournalListRes> getAllJournals() {
         List<Journal> journals = journalRepository.findAll();
         return journals.stream()
-                .map(JournalRes::fromEntity)
+                .map(JournalListRes::fromEntity)
                 .collect(Collectors.toList());
     }
-
-    @Transactional
+    @Transactional(readOnly = true)
     public JournalRes getJournal(Long journalId) {
-        Journal journal = journalRepository.findByIdWithComments(journalId)
+        Journal journal = journalRepository.findById(journalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
-        journal.incrementViewCount();
-        journalRepository.save(journal);
         return JournalRes.fromEntity(journal);
     }
 

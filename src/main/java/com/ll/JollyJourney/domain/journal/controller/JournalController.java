@@ -1,5 +1,6 @@
 package com.ll.JollyJourney.domain.journal.controller;
 
+import com.ll.JollyJourney.domain.journal.dto.JournalListRes;
 import com.ll.JollyJourney.domain.journal.dto.JournalReq;
 import com.ll.JollyJourney.domain.journal.dto.JournalRes;
 import com.ll.JollyJourney.domain.journal.entity.Journal;
@@ -37,20 +38,18 @@ public class JournalController {
 
     @Operation(summary = "정보글 전체 조회", description = "정보글 전체 조회")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "정보글 전체 조회 성공",
-                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = "정보글 전체 조회 성공", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "전체 정보글 조회 실패")
     })
     @GetMapping("")
-    public ResponseEntity<List<JournalRes>> getAllJournals() {
-        List<JournalRes> journals = journalService.getAllJournals();
+    public ResponseEntity<List<JournalListRes>> getAllJournals() {
+        List<JournalListRes> journals = journalService.getAllJournals();
         return ResponseEntity.ok(journals);
     }
 
     @Operation(summary = "특정 정보글 조회", description = "journalId로 특정 게시물을 조회하는 기능")
     @ApiResponses({
-            @ApiResponse(responseCode = "200", description = "정보글 조회 성공",
-                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "200", description = "정보글 조회 성공", content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "정보글 조회 실패")
     })
     @GetMapping("/{id}")
