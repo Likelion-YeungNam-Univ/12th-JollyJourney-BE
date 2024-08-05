@@ -24,10 +24,13 @@ public class JournalService {
                 .collect(Collectors.toList());
     }
 
-    @Transactional(readOnly = true)
-    public Journal getJournal(Long journalId) {
-        return journalRepository.findById(journalId)
+    @Transactional
+    public JournalRes getJournal(Long journalId) {
+        Journal journal = journalRepository.findByIdWithComments(journalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
+        journal.incrementViewCount();
+        journalRepository.save(journal);
+        return JournalRes.fromEntity(journal);
     }
 
     @Transactional
