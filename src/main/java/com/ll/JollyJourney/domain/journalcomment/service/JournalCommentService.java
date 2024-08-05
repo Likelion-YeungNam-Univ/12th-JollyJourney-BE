@@ -76,9 +76,6 @@ public class JournalCommentService {
         CustomUserDetails userDetails = (CustomUserDetails) authentication.getPrincipal();
         Long currentUserId = userDetails.getMemberId();
 
-        log.info("현재 사용자 ID: {}", currentUserId);
-        log.info("댓글 작성자 ID: {}", journalComment.getMember().getUserId());
-
         if (!journalComment.getMember().getUserId().equals(currentUserId)) {
             throw new AccessDeniedException("댓글 작성자만 수정할 수 있습니다.");
         }

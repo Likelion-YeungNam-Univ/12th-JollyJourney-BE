@@ -6,7 +6,6 @@ import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.journalcomment.service.JournalCommentService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
-import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -31,22 +30,7 @@ public class JournalCommentController {
     @Operation(summary = "댓글 전체 조회", description = "특정 정보글의 모든 댓글을 조회합니다.")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "댓글 전체 조회 성공",
-                    content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
-                    [
-                        {
-                            "commentId": 1,
-                            "content": "첫번째 댓글입니다.",
-                            "createDate": "2024-08-03T12:15:17.442176",
-                            "author": "user1"
-                        },
-                        {
-                            "commentId": 2,
-                            "content": "두번째 댓글입니다.",
-                            "createDate": "2024-08-03T12:16:17.442176",
-                            "author": "user2"
-                        }
-                    ]
-                    """))),
+                    content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "댓글 조회 실패")
     })
     @GetMapping("")
@@ -58,14 +42,7 @@ public class JournalCommentController {
     @Operation(summary = "특정 댓글 조회", description = "commentId로 특정 댓글을 조회하는 기능")
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "댓글 조회 성공",
-                    content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
-                            {
-                                "commentId": 1,
-                                "content": "첫번째 댓글입니다.",
-                                "createDate": "2024-08-03T12:15:17.442176",
-                                "author": "user1"
-                            }
-                            """))),
+                    content = @Content(mediaType = "application/json")),
             @ApiResponse(responseCode = "400", description = "댓글 조회 실패")
     })
     @GetMapping("/{commentId}")
@@ -78,11 +55,9 @@ public class JournalCommentController {
             security = @SecurityRequirement(name = "BearerAuth"))
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "댓글 생성 성공",
-                    content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
-                            {
-                            }
-                            """))),
-            @ApiResponse(responseCode = "400", description = "댓글 생성 실패")
+                    content = @Content(mediaType = "application/json")),
+            @ApiResponse(responseCode = "400", description = "댓글 생성 실패"),
+            @ApiResponse(responseCode = "403", description = "권한 없음")
     })
     @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/create")
@@ -99,7 +74,8 @@ public class JournalCommentController {
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "댓글 수정 성공",
                     content = @Content(mediaType = "application/json")),
-            @ApiResponse(responseCode = "400", description = "댓글 수정 실패")
+            @ApiResponse(responseCode = "400", description = "댓글 수정 실패"),
+            @ApiResponse(responseCode = "403", description = "권한 없음")
     })
     @PutMapping("/modify/{id}")
     public ResponseEntity<JournalCoRes> updateComment(@PathVariable Long journalId, @PathVariable Long id, @RequestBody JournalCoReq journalCoReq, Authentication authentication) {
