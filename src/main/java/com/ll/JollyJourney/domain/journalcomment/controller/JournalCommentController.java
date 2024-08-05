@@ -59,7 +59,7 @@ public class JournalCommentController {
             @ApiResponse(responseCode = "400", description = "댓글 생성 실패"),
             @ApiResponse(responseCode = "403", description = "권한 없음")
     })
-    @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MEMBER')")
     @PostMapping("/create")
     public ResponseEntity<JournalComment> createComment(@RequestBody JournalCoReq request, Authentication authentication) {
         if (authentication == null || !authentication.isAuthenticated()) {
@@ -91,6 +91,7 @@ public class JournalCommentController {
             @ApiResponse(responseCode = "400", description = "댓글 삭제 실패"),
             @ApiResponse(responseCode = "403", description = "권한 없음")
     })
+    @PreAuthorize("hasAnyAuthority('ROLE_ADMIN', 'ROLE_MEMBER')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteComment(@PathVariable Long journalId, @PathVariable Long id, Authentication authentication) {
         try {

@@ -55,8 +55,7 @@ public class JournalController {
     })
     @GetMapping("/{id}")
     public ResponseEntity<JournalRes> getJournal(@PathVariable Long id) {
-        Journal journal = journalService.getJournal(id);
-        JournalRes journalRes = JournalRes.fromEntity(journal);
+        JournalRes journalRes = journalService.getJournal(id);
         return ResponseEntity.ok(journalRes);
     }
 
