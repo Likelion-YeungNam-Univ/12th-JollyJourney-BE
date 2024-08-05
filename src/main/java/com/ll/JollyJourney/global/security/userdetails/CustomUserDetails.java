@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.global.security.authentication;
+package com.ll.JollyJourney.global.security.userdetails;
 
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import org.springframework.security.core.GrantedAuthority;

@@ -3,7 +3,7 @@ package com.ll.JollyJourney.domain.member.mypage.controller;
 
 import com.ll.JollyJourney.domain.member.member.dto.ModifyRequest;
 import com.ll.JollyJourney.domain.member.member.service.MemberService;
-import com.ll.JollyJourney.global.security.authentication.CustomUserDetails;
+import com.ll.JollyJourney.global.security.userdetails.CustomUserDetails;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

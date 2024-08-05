@@ -9,10 +9,12 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -22,7 +24,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/diary")
 @RequiredArgsConstructor
-@Tag(name = "Diary API", description = "Diary 관련 CRUD API")
+@Tag(name = "[Diary 관련 API]", description = "나의 일기 관련 CRUD API")
 public class DiaryController {
     private final DiaryService diaryService;
 
@@ -40,16 +42,16 @@ public class DiaryController {
                             "sleepTime": "08:00:00",
                             "sleepQuality": "좋음",
                             "kidReport": "아이와 함께 놀기 2시간",
-                            "bodyStatus": "HEALTHY",
-                            "emotionStatus": "HAPPY"
+                            "bodyStatus": "HEADACHE",
+                            "emotionStatus": "HAPPINESS"
                         }
                     ]
                     """))),
             @ApiResponse(responseCode = "400", description = "모든 일기 조회 실패")
     })
     @GetMapping("")
-    public ResponseEntity<List<DiaryRes>> getAllDiaries() {
-        List<DiaryRes> diaries = diaryService.getAlldiaries();
+    public ResponseEntity<List<DiaryRes>> getAllDiaries(@PathVariable Long userDId) {
+        List<DiaryRes> diaries = diaryService.getAlldiaries(userDId);
         return ResponseEntity.ok(diaries);
     }
 
@@ -66,8 +68,8 @@ public class DiaryController {
                                 "sleepTime": "08:00:00",
                                 "sleepQuality": "좋음",
                                 "kidReport": "아이와 함께 놀기 2시간",
-                                "bodyStatus": "HEALTHY",
-                                "emotionStatus": "HAPPY"
+                                "bodyStatus": "HEADACHE",
+                                "emotionStatus": "HAPPINESS"
                             }
                             """))),
             @ApiResponse(responseCode = "400", description = "특정 일기 조회 실패")
@@ -78,7 +80,8 @@ public class DiaryController {
         return ResponseEntity.ok(diaryRes);
     }
 
-    @Operation(summary = "일기 생성", description = "새로운 일기를 생성합니다.")
+    @Operation(summary = "일기 생성", description = "새로운 일기를 생성합니다.",
+            security = @SecurityRequirement(name = "BearerAuth"))
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "일기 생성 성공",
                     content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
@@ -91,19 +94,22 @@ public class DiaryController {
                                 "sleepTime": "08:00:00",
                                 "sleepQuality": "좋음",
                                 "kidReport": "아이와 함께 놀기 2시간",
-                                "bodyStatus": "HEALTHY",
-                                "emotionStatus": "HAPPY"
+                                "bodyStatus": "HEADACHE",
+                                "emotionStatus": "HAPPINESS"
                             }
                             """))),
             @ApiResponse(responseCode = "400", description = "일기 생성 실패")
     })
+
+    @PreAuthorize("hasAnyAuthority('ROLE_MEMBER')")
     @PostMapping("/create")
     public ResponseEntity<Diary> createDiary(@RequestBody DiaryReq request, Authentication authentication) {
         Diary diary = diaryService.createDiary(request, authentication);
         return ResponseEntity.ok(diary);
     }
 
-    @Operation(summary = "일기 수정", description = "기존 일기를 수정합니다.")
+    @Operation(summary = "일기 수정", description = "기존 일기를 수정합니다.",
+            security = @SecurityRequirement(name = "BearerAuth"))
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "일기 수정 성공",
                     content = @Content(mediaType = "application/json", examples = @ExampleObject(value = """
@@ -116,14 +122,14 @@ public class DiaryController {
                                 "sleepTime": "07:30:00",
                                 "sleepQuality": "보통",
                                 "kidReport": "수정된 육아 기록",
-                                "bodyStatus": "UNWELL",
-                                "emotionStatus": "SAD"
+                                "bodyStatus": "HEADACHE",
+                                "emotionStatus": "HAPPINESS"
                             }
                             """))),
             @ApiResponse(responseCode = "400", description = "일기 수정 실패")
     })
     @PutMapping("/modify/{id}")
-    public ResponseEntity<DiaryRes> updateDiary(@PathVariable Long id, @RequestBody DiaryReq diaryReq, Authentication authentication) {
+    public ResponseEntity<DiaryRes> updateDiary(@PathVariable Long userDId, @PathVariable Long id, @RequestBody DiaryReq diaryReq, Authentication authentication) {
         Diary diary = diaryService.updateDiary(id, diaryReq, authentication);
         DiaryRes diaryRes = DiaryRes.fromEntity(diary);
         return ResponseEntity.ok(diaryRes);
@@ -134,6 +140,8 @@ public class DiaryController {
             @ApiResponse(responseCode = "200", description = "일기 삭제 성공"),
             @ApiResponse(responseCode = "400", description = "일기 삭제 실패")
     })
+
+    @PreAuthorize("hasAnyAuthority('ROLE_MEMBER')")
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteDiary(@PathVariable Long id, Authentication authentication) {
         try {

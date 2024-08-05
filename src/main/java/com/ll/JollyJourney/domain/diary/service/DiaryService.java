@@ -6,7 +6,7 @@ import com.ll.JollyJourney.domain.diary.entity.Diary;
 import com.ll.JollyJourney.domain.diary.repository.DiaryRepository;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
-import com.ll.JollyJourney.global.security.authentication.CustomUserDetails;
+import com.ll.JollyJourney.global.security.userdetails.CustomUserDetails;
 import jakarta.transaction.Transactional;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
@@ -29,10 +29,18 @@ public class DiaryService {
     @Autowired
     private final MemberRepository memberRepository;
 
-
     @Transactional
     public List<DiaryRes> getAlldiaries() {
         List<Diary> diaries = diaryRepository.findAll();
+        return diaries.stream()
+                .map(DiaryRes::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+
+    @Transactional
+    public List<DiaryRes> getAlldiaries(Long userDId) {
+        List<Diary> diaries = diaryRepository.findByUserDId(userDId);
         return diaries.stream()
                 .map(DiaryRes::fromEntity)
                 .collect(Collectors.toList());

@@ -1,7 +1,7 @@
-package com.ll.JollyJourney.global.security.config;
+package com.ll.JollyJourney.global.config;
 
-import com.ll.JollyJourney.global.security.jwt.JwtAuthenticationFilter;
-import com.ll.JollyJourney.global.security.jwt.JwtTokenProvider;
+import com.ll.JollyJourney.global.jwt.JwtAuthenticationFilter;
+import com.ll.JollyJourney.global.jwt.JwtTokenProvider;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Configuration;

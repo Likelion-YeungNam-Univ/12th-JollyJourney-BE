@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.global.security.jwt;
+package com.ll.JollyJourney.global.jwt;
 
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.FilterChain;

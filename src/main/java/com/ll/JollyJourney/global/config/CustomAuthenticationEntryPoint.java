@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.global.security.config;
+package com.ll.JollyJourney.global.config;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

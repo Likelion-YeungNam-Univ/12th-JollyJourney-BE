@@ -8,7 +8,7 @@ import com.ll.JollyJourney.domain.journalcomment.entity.JournalComment;
 import com.ll.JollyJourney.domain.journalcomment.repository.JournalCommentRepository;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
-import com.ll.JollyJourney.global.security.authentication.CustomUserDetails;
+import com.ll.JollyJourney.global.security.userdetails.CustomUserDetails;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;

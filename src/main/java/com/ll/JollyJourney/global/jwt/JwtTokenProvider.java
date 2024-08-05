@@ -1,6 +1,6 @@
-package com.ll.JollyJourney.global.security.jwt;
+package com.ll.JollyJourney.global.jwt;
 
-import com.ll.JollyJourney.global.security.authentication.UserDetailsServiceImpl;
+import com.ll.JollyJourney.global.security.userdetails.UserDetailsServiceImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Header;
 import io.jsonwebtoken.Jwts;

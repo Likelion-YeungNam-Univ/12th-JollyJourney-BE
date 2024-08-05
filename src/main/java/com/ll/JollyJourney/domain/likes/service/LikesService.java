@@ -8,7 +8,7 @@ import com.ll.JollyJourney.domain.likes.entity.Likes;
 import com.ll.JollyJourney.domain.likes.repository.LikesRepository;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
-import com.ll.JollyJourney.global.security.authentication.CustomUserDetails;
+import com.ll.JollyJourney.global.security.userdetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;

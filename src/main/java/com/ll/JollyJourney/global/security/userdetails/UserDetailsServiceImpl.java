@@ -1,7 +1,8 @@
-package com.ll.JollyJourney.global.security.authentication;
+package com.ll.JollyJourney.global.security.userdetails;
 
 
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
+import com.ll.JollyJourney.global.security.userdetails.CustomUserDetails;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
