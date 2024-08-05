@@ -1,6 +1,7 @@
 package com.ll.JollyJourney.global.security.config;
 
 import com.ll.JollyJourney.global.security.CustomAuthenticationEntryPoint;
+import com.ll.JollyJourney.global.security.jwt.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -28,6 +29,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final CustomAuthenticationEntryPoint customAuthenticationEntryPoint;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
     private List<String> corsOrigins = List.of("http://localhost:3000", "http://localhost:8080");
 
 
@@ -44,6 +46,8 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/journal/create")).hasAuthority("ROLE_ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/journal/modify/{id}")).hasAuthority("ROLE_ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/journal/delete/{id}")).hasAuthority("ROLE_ADMIN")
+                        .requestMatchers(new AntPathRequestMatcher("/journal/{journalId}/comments")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/journal/{journalId}/comments/{commentId}")).permitAll()
                         .requestMatchers("/**").permitAll() // url 수정
                         .anyRequest().authenticated()
                 )

@@ -28,9 +28,19 @@ public class JournalCommentService {
     private JournalRepository journalRepository;
     @Autowired
     private MemberRepository memberRepository;
+
     @Transactional(readOnly=true)
     public List<JournalCoRes> getAllComments() {
         List<JournalComment> comments = journalCommentRepository.findAll();
+        return comments.stream()
+                .map(JournalCoRes::fromEntity)
+                .collect(Collectors.toList());
+    }
+
+    // 특정 journalId의 모든 댓글을 가져오는 메서드 추가
+    @Transactional(readOnly = true)
+    public List<JournalCoRes> getAllComments(Long journalId) {
+        List<JournalComment> comments = journalCommentRepository.findByJournal_JournalId(journalId);
         return comments.stream()
                 .map(JournalCoRes::fromEntity)
                 .collect(Collectors.toList());
