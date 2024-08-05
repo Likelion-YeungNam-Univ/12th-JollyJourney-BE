@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.global.security.config;
+package com.ll.JollyJourney.global.config;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;

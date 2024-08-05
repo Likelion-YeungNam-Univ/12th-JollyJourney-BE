@@ -1,4 +1,4 @@
-package com.ll.JollyJourney.global.security.config;
+package com.ll.JollyJourney.global.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.access.AccessDeniedException;

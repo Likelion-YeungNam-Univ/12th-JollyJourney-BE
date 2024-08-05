@@ -1,5 +1,5 @@
 
-package com.ll.JollyJourney.global.security.config;
+package com.ll.JollyJourney.global.config;
 
 import com.amazonaws.auth.AWSCredentials;
 import com.amazonaws.auth.AWSStaticCredentialsProvider;

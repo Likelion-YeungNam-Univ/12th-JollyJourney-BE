@@ -3,7 +3,7 @@ package com.ll.JollyJourney.domain.auth.service;
 import com.ll.JollyJourney.domain.auth.dto.*;
 import com.ll.JollyJourney.domain.member.member.entity.Member;
 import com.ll.JollyJourney.domain.member.member.repository.MemberRepository;
-import com.ll.JollyJourney.global.security.jwt.JwtTokenProvider;
+import com.ll.JollyJourney.global.jwt.JwtTokenProvider;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
