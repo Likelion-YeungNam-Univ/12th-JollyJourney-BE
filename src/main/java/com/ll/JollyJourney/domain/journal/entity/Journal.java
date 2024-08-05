@@ -79,6 +79,8 @@ public class Journal extends BaseEntity {
         return (comments == null) ? 0 : comments.size();
     }
 
-
+    public String getImageUrl() {
+        return imageUrl;
+    }
 }
 
