@@ -18,6 +18,8 @@ public interface JournalRepository extends JpaRepository<Journal, Long> {
     List<Journal> findByTitleLike(String title);
     Page<Journal> findAll(Pageable pageable);
 
+    @Query("SELECT j FROM Journal j LEFT JOIN FETCH j.comments WHERE j.journalId = :journalId")
+    Optional<Journal> findByIdWithComments(@Param("journalId") Long journalId);
 
     @Query("SELECT j FROM Journal j WHERE (:type = 'title' AND j.title LIKE %:keyword%) OR (:type = 'content' AND j.content LIKE %:keyword%)")
     Page<Journal> searchByTypeAndKeyword(@Param("type") String type, @Param("keyword") String keyword, Pageable pageable);

@@ -23,11 +23,11 @@ public class Journal extends BaseEntity {
 
     @NotNull
     private String title; // 제목 필드 추가
-
     private String content;
-    private int likesCount = 0;
-
     private String imageUrl;
+
+    private int likesCount = 0;
+    private int viewCount = 0;
 
     @OneToMany(mappedBy = "journal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<JournalComment> comments;
@@ -81,6 +81,14 @@ public class Journal extends BaseEntity {
 
     public String getImageUrl() {
         return imageUrl;
+    }
+
+    public void incrementViewCount() {
+        this.viewCount++;
+    }
+
+    public int getViewCount() {
+        return viewCount;
     }
 }
 
