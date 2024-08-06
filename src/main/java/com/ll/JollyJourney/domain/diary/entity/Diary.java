@@ -8,6 +8,7 @@ import lombok.*;
 import org.hibernate.annotations.Comment;
 
 import java.sql.Time;
+import java.time.LocalDate;
 
 @Entity
 @Getter
@@ -19,6 +20,9 @@ public class Diary extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long userDId;
+
+    @Column(nullable = false)
+    private LocalDate userDate;
 
     @Comment("명상 기록")
     private String meditationReport;

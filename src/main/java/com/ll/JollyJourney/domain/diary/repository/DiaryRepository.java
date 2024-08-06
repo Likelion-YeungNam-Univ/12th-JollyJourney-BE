@@ -3,6 +3,7 @@ package com.ll.JollyJourney.domain.diary.repository;
 import com.ll.JollyJourney.domain.diary.entity.Diary;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -12,4 +13,6 @@ public interface DiaryRepository extends JpaRepository<Diary, Long> {
 //    Optional<Diary> findByUserDId(Long userDid);
 
     List<Diary> findByUserDId(Long userDId);
+
+    List<Diary> findByUserDate(LocalDate userDate);
 }

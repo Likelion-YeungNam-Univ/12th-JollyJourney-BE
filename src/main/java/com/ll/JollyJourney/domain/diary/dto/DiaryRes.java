@@ -9,6 +9,7 @@ import java.time.LocalDateTime;
 
 public record DiaryRes(
         Long userDId,
+        String userDate,
         String meditationReport,
         String thanksReport,
         String exerciseReport,
@@ -25,6 +26,7 @@ public record DiaryRes(
     public static DiaryRes fromEntity(Diary diary) {
         return new DiaryRes(
                 diary.getUserDId(),
+                diary.getUserDate().toString(),
                 diary.getMeditationReport(),
                 diary.getThanksReport(),
                 diary.getExerciseReport(),

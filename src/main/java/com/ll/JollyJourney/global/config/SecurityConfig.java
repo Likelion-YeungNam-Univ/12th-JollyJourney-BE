@@ -1,6 +1,7 @@
 package com.ll.JollyJourney.global.config;
 
 import com.ll.JollyJourney.global.security.handler.CustomAuthenticationEntryPoint;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -19,10 +20,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import org.springframework.security.web.util.matcher.RequestMatcher;
 import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Stream;
@@ -34,8 +32,10 @@ import java.util.stream.Stream;
 public class SecurityConfig {
 
     private static final String[] publicEndpoints = {
-            "/api/v1/auth/signin",
-            "/api/v1/auth/signup",
+            "/auth/signin",
+            "/auth/signup",
+            "/auth/modify/",
+            "/auth/password/update",
 
             /* swagger v3*/
             "/swagger-ui/**",
@@ -51,6 +51,7 @@ public class SecurityConfig {
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 //    @Bean
 //    public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
 //
@@ -72,18 +73,57 @@ public class SecurityConfig {
 //
 //        return httpSecurity.build();
 //    }
+//    @Bean
+//    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+//        CorsConfiguration config = new CorsConfiguration();
+//        config.setAllowedOriginPatterns(Collections.singletonList("*"));
+//        config.setAllowedMethods(Collections.singletonList("*"));
+//        config.setAllowedHeaders(Collections.singletonList("*"));
+//        config.setExposedHeaders(Collections.singletonList("*"));
+//        config.setAllowCredentials(true);
+//        config.setMaxAge(3600L);
+//        return config;
+//}
+
+
+
     @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Collections.singletonList("*")); // 모든 출처 허용
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메서드 허용
-        configuration.setAllowedHeaders(Collections.singletonList("*")); // 모든 헤더 허용
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
+    public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
+        CorsConfiguration config = new CorsConfiguration();
+        config.setAllowedOriginPatterns(Collections.singletonList("*"));
+        config.setAllowedMethods(Collections.singletonList("*"));
+        config.setAllowedHeaders(Collections.singletonList("*"));
+        config.setExposedHeaders(Collections.singletonList("*"));
+        config.setAllowCredentials(true);
+        config.setMaxAge(3600L);
+        return config;
     }
 
-    /*AntPathRequestMatcher를 사용하면 추후 메소드 설정 등 더 유연한 경로를 매칭할 수 있다.*/
+////    @Bean
+////    public CorsConfigurationSource corsConfigurationSource() {
+////        CorsConfiguration configuration = new CorsConfiguration();
+////        configuration.setAllowedOrigins(Arrays.asList("https://locahost:3000", "https://3.125.25.162"));;
+////        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메서드 허용
+////        configuration.setAllowedHeaders(Collections.singletonList("*")); // 모든 헤더 허
+////        configuration.setAllowCredentials(true);
+////        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+////        source.registerCorsConfiguration("/**", configuration);
+////        return source;
+////    }
+//
+//
+//    @Bean
+//    public CorsConfigurationSource corsConfigurationSource() {
+//        CorsConfiguration configuration = new CorsConfiguration();
+//        configuration.setAllowedOrigins(Collections.singletonList("*")); // 모든 출처 허용
+//        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PUT", "DELETE", "OPTIONS")); // 모든 HTTP 메서드 허용
+//        configuration.setAllowedHeaders(Collections.singletonList("*")); // 모든 헤더 허용
+//        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
+//        source.registerCorsConfiguration("/**", configuration);
+//        return source;
+//    }
+
+    /*AntPathRequestMatcher를 사용하면 추 후 메소드 설정 등 더 유연한 경로를 매칭할 수 있다.*/
     private RequestMatcher[] getPublicEndpoints() {
         return Stream.concat(
                 Stream.of(publicEndpoints).map(AntPathRequestMatcher::new),
@@ -97,7 +137,7 @@ public class SecurityConfig {
     public SecurityFilterChain filterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity
                 .csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
+//                .cors(cors -> cors.configurationSource(corsConfigurationSource()))
 
                 .sessionManagement(sess -> sess.sessionCreationPolicy(
                         SessionCreationPolicy.STATELESS))
@@ -108,6 +148,9 @@ public class SecurityConfig {
                         .requestMatchers(new AntPathRequestMatcher("/journal/delete/{id}")).hasAuthority("ROLE_ADMIN")
                         .requestMatchers(new AntPathRequestMatcher("/journal/{journalId}/comments")).permitAll()
                         .requestMatchers(new AntPathRequestMatcher("/journal/{journalId}/comments/{commentId}")).permitAll()
+                        .requestMatchers(new AntPathRequestMatcher("/diary/create")).hasAuthority("ROLE_MEMBER")
+                        .requestMatchers(new AntPathRequestMatcher("/diary/modify/{id}")).hasAuthority("ROLE_MEMBER")
+                        .requestMatchers(new AntPathRequestMatcher("/diary/delete/{id}")).hasAuthority("ROLE_MEMBER")
                         .requestMatchers("/**").permitAll() // url 수정
                         .anyRequest().authenticated()
                 )
