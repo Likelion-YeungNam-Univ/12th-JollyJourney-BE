@@ -11,7 +11,7 @@ public record JournalListRes(
         LocalDateTime createDate,
         LocalDateTime modifyDate,
         int likesCount,
-        int viwCount,
+        int viewCount,
         int commentCount
 ) {
     public static JournalListRes fromEntity(Journal journal) {

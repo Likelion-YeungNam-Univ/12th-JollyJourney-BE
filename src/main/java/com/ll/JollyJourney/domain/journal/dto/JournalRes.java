@@ -15,12 +15,12 @@ public record JournalRes(
         LocalDateTime createDate,
         LocalDateTime modifyDate,
         int likesCount,
-        int viwCount,
+        int viewCount,
         int commentCount,
         List<JournalCoRes> comments
 ) {
-    public static JournalRes of(Long journalId, String title, String content, String imageUrl, LocalDateTime createDate, LocalDateTime modifyDate, int likesCount, int viwCount, int commentCount, List<JournalCoRes> comments) {
-        return new JournalRes(journalId, title, content, imageUrl, createDate, modifyDate, likesCount, viwCount, commentCount, comments);
+    public static JournalRes of(Long journalId, String title, String content, String imageUrl, LocalDateTime createDate, LocalDateTime modifyDate, int likesCount, int viewCount, int commentCount, List<JournalCoRes> comments) {
+        return new JournalRes(journalId, title, content, imageUrl, createDate, modifyDate, likesCount, viewCount, commentCount, comments);
     }
 
     public static JournalRes fromEntity(Journal journal) {
