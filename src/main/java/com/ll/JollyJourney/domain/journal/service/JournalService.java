@@ -23,13 +23,15 @@ public class JournalService {
                 .map(JournalListRes::fromEntity)
                 .collect(Collectors.toList());
     }
-    @Transactional(readOnly = true)
+    @Transactional
     public JournalRes getJournal(Long journalId) {
         Journal journal = journalRepository.findById(journalId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 정보글 없음"));
+        journal.incrementViewCount();
+        journalRepository.save(journal);
         return JournalRes.fromEntity(journal);
     }
-
+    
     @Transactional
     public Journal createJournal(JournalReq request, String imageUrl) {
         Journal journal = request.toEntity(imageUrl);
